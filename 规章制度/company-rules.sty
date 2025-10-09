@@ -1,73 +1,211 @@
 % !TeX program = XeLaTeX
 % !TeX encoding = UTF-8
-% 公司规章制度样式包
-% 使用方法：\usepackage{mystyle}
+%%
+%% 公司规章制度LaTeX样式包 (优化版本 v2.0)
+%% 版本：2.0 - 简化稳定版
+%% 日期：2024-01-01
+%% 
+%% 使用方法：
+%% \usepackage{company-rules-optimized-v2}
+%% 或者使用预定义配置：
+%% \usepackage[small]{company-rules-optimized-v2}  % 小字体配置
+%% \usepackage[large]{company-rules-optimized-v2}  % 大字体配置
+%%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{company-rules}[2024-01-01 公司规章制度样式包]
+\ProvidesPackage{company-rules}[2024-01-01 v2.0 公司规章制度样式包优化版]
 
-% 加载必要的宏包
-\RequirePackage{enumitem} % 用于优化列表格式，提升可读性
-\RequirePackage{geometry} % 调整页面边距，适配中文排版
-\RequirePackage{hyperref} % 添加超链接支持
-\geometry{a4paper, margin=1.2in} % 设置A4纸，边距1.2英寸
+% ==================== 参数化配置 ====================
 
-% 重新定义\normalsize命令以设置固定行距
-% 小三号字体约为15pt，设置行距为30pt以匹配Word中的30磅行距
-\renewcommand{\normalsize}{%
-  \@setfontsize\normalsize{15pt}{30pt}%
-  \linespread{1}%
-  \selectfont
+% 定义可配置参数的默认值（使用small配置作为默认）
+\def\companyrules@margin{1.5in}
+\def\companyrules@fontsize{15pt}
+\def\companyrules@lineheight{30pt}
+\def\companyrules@fakebold{3}
+\def\companyrules@indent{2em}
+\def\companyrules@primaryfont{STFangsong}
+\def\companyrules@titlefont{STZhongsong}
+\def\companyrules@titlesize{18pt}
+
+% 声明包选项（使用中文字号标准）
+\DeclareOption{small}{%
+  \def\companyrules@fontsize{15pt}%          % 小三号约15pt
+  \def\companyrules@lineheight{30pt}%        % 适配小三号的行距
+  \def\companyrules@margin{1.5in}%
+  \def\companyrules@titlesize{18pt}%         % 小二号约18pt
 }
 
-% 设置中文字体，正文使用仿宋，启用伪粗体功能
-\setCJKmainfont{STFangsong}[
-    BoldFont=*,
-    BoldFeatures={FakeBold=3}, % 启用伪粗体，数值越大越粗
-    ItalicFont=*,
-    ItalicFeatures={FakeSlant=0.2}
-] % 正文使用仿宋，支持伪粗体
+\DeclareOption{large}{%
+  \def\companyrules@fontsize{16pt}%          % 三号约16pt
+  \def\companyrules@lineheight{32pt}%        % 适配三号的行距
+  \def\companyrules@margin{1.0in}%
+  \def\companyrules@titlesize{18pt}%         % 小二号约18pt
+}
 
-% 设置段落首行缩进为2字符
-\setlength{\parindent}{2em}
+% 处理未知选项
+\DeclareOption*{%
+  \PackageWarning{company-rules-optimized-v2}{未知选项 '\CurrentOption'，使用默认配置}%
+}
 
-% 设置全局有序列表格式，使编号起始位置与正文首行缩进对齐，编号与内容间无额外空隙
-\setlist[enumerate]{label=（\chinese*）, wide=2em, labelsep=0pt, itemsep=0pt, listparindent=2em}
+% 处理选项
+\ProcessOptions\relax
 
-% 设置章节标题格式，确保中文编号正确显示，使用华文中宋小三号
+% ==================== 条件宏包加载 ====================
+
+% 条件加载必要的宏包，避免重复加载
+\@ifpackageloaded{enumitem}{%
+  \PackageInfo{company-rules}{enumitem 已加载}%
+}{%
+  \RequirePackage{enumitem}%
+  \PackageInfo{company-rules}{加载 enumitem 宏包}%
+}
+
+\@ifpackageloaded{geometry}{%
+  \PackageInfo{company-rules}{geometry 已加载}%
+}{%
+  \RequirePackage{geometry}%
+  \PackageInfo{company-rules}{加载 geometry 宏包}%
+}
+
+\@ifpackageloaded{hyperref}{%
+  \PackageInfo{company-rules}{hyperref 已加载}%
+}{%
+  \RequirePackage{hyperref}%
+  \PackageInfo{company-rules}{加载 hyperref 宏包}%
+}
+
+% ==================== 页面布局设置 ====================
+
+% 使用参数化的页面设置
+\geometry{a4paper, margin=\companyrules@margin}
+\PackageInfo{company-rules}{页面边距设置为: \companyrules@margin}
+
+% ==================== 字体设置与错误处理 ====================
+
+% 简化的字体设置，带错误处理
+\IfFontExistsTF{\companyrules@primaryfont}{%
+  \PackageInfo{company-rules}{找到主字体: \companyrules@primaryfont}%
+  \setCJKmainfont{\companyrules@primaryfont}[
+      BoldFont=*,
+      BoldFeatures={FakeBold=\companyrules@fakebold},
+      ItalicFont=*,
+      ItalicFeatures={FakeSlant=0.2}
+  ]
+}{%
+  \PackageWarning{company-rules}{主字体 \companyrules@primaryfont\space 未找到，使用默认字体}%
+  \setCJKmainfont{SimSun}[
+      BoldFont=*,
+      BoldFeatures={FakeBold=\companyrules@fakebold},
+      ItalicFont=*,
+      ItalicFeatures={FakeSlant=0.2}
+  ]
+}
+
+% 定义标题字体命令
+\IfFontExistsTF{\companyrules@titlefont}{%
+  \PackageInfo{company-rules}{找到标题字体: \companyrules@titlefont}%
+  \newcommand{\companyrules@settitlefont}{\CJKfontspec{\companyrules@titlefont}}%
+}{%
+  \PackageWarning{company-rules}{标题字体 \companyrules@titlefont\space 未找到，使用默认字体}%
+  \newcommand{\companyrules@settitlefont}{\CJKfontspec{SimSun}}%
+}
+
+% ==================== 字体大小和行距设置 ====================
+
+% 重新定义\normalsize命令，使用参数化设置
+\renewcommand{\normalsize}{%
+  \@setfontsize\normalsize{\companyrules@fontsize}{\companyrules@lineheight}%
+  \linespread{1}%
+  \selectfont%
+}
+
+% 设置段落首行缩进
+\setlength{\parindent}{\companyrules@indent}
+
+% ==================== 列表格式设置 ====================
+
+% 设置全局有序列表格式，使用参数化缩进
+\setlist[enumerate]{%
+  label=（\chinese*）, 
+  wide=\companyrules@indent, 
+  labelsep=0pt, 
+  itemsep=0pt, 
+  listparindent=\companyrules@indent%
+}
+
+% ==================== 章节标题格式（统一设置）====================
+
+% 统一设置章节格式，避免重复配置
 \ctexset{
+    % 章标题设置
     section/name = {第,章},
     section/number = \chinese{section},
-    section/format = \centering\zihao{-3}\CJKfontspec{STZhongsong},
-    subsection/format = \zihao{-3},
-    subsection/number = \arabic{subsection}
-}
-
-% 设置article格式为subsection级别，使用条款编号格式
-\ctexset{
+    section/format = \centering\fontsize{\companyrules@titlesize}{\companyrules@titlesize}\companyrules@settitlefont\selectfont,
+    % 条款标题设置（合并设置，消除冗余）
     subsection/name = {第,条},
     subsection/number = \chinese{subsection},
-    subsection/format = \normalsize\bfseries,
+    subsection/format = \fontsize{\companyrules@fontsize}{\companyrules@lineheight}\selectfont\bfseries,
     subsection/beforeskip = 0pt,
     subsection/afterskip = 0pt,
-    subsection/indent = 2em,
+    subsection/indent = \companyrules@indent,
 }
+
+% ==================== 条款编号格式 ====================
 
 % 重定义subsection标题显示格式
 \renewcommand{\thesubsection}{第\chinese{subsection}条}
 
-% 定义条款标题命令，直接使用subsection实现
+% 定义条款标题命令，增加错误处理
 \newcommand{\article}[1]{%
-  \subsection[#1]{#1}%
-  \normalfont%
+  \@ifundefined{subsection}{%
+    \PackageError{company-rules}{subsection命令未定义}{请确保使用支持subsection的文档类}%
+  }{%
+    \subsection[#1]{#1}%
+    \normalfont%
+  }%
 }
+
+% ==================== 页面样式设置 ====================
 
 % 设置页面样式为plain，显示页码在底部居中
 \pagestyle{plain}
 
-% 设置文档标题格式（华文中宋小二号）
-\newcommand{\setdoctitle}[1]{
-    \title{\CJKfontspec{STZhongsong}\zihao{2} #1}
+% ==================== 文档标题格式 ====================
+
+% 设置文档标题格式，使用参数化字体
+\newcommand{\setdoctitle}[1]{%
+  \title{\fontsize{\companyrules@titlesize}{\companyrules@titlesize}\companyrules@settitlefont\selectfont #1}%
+}
+
+% ==================== 辅助命令 ====================
+
+% 提供配置查看命令（调试用）
+\newcommand{\showcompanyrulescfg}{%
+  \typeout{=== Company Rules v2 配置信息 ===}%
+  \typeout{边距: \companyrules@margin}%
+  \typeout{正文字体大小: \meaning\companyrules@fontsize}%
+  \typeout{标题字体大小: \meaning\companyrules@titlesize}%
+  \typeout{行距: \companyrules@lineheight}%
+  \typeout{段落缩进: \companyrules@indent}%
+  \typeout{主字体: \companyrules@primaryfont}%
+  \typeout{标题字体: \companyrules@titlefont}%
+  \typeout{伪粗体强度: \companyrules@fakebold}%
+  \typeout{===============================}%
+}
+
+% 版本信息命令
+\newcommand{\companyruleslversion}{%
+  \PackageInfo{company-rules}{版本: 2.0, 日期: 2024-01-01}%
+}
+
+% 提供运行时配置修改命令
+\newcommand{\setcompanyrulescfg}[2]{%
+  \@ifundefined{companyrules@#1}{%
+    \PackageWarning{company-rules}{未知配置项: #1}%
+  }{%
+    \expandafter\def\csname companyrules@#1\endcsname{#2}%
+    \PackageInfo{company-rules}{配置 #1 已更新为: #2}%
+  }%
 }
 
 % 结束宏包定义
