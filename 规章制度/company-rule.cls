@@ -20,38 +20,38 @@
 % ==================== 参数化配置 ====================
 
 % 定义可配置参数的默认值（使用small配置作为默认）
-\def\companyrules@leftmargin{2.8cm}% 左页边距
-\def\companyrules@rightmargin{2.8cm}% 右页边距
-\def\companyrules@topmargin{3.7cm}% 上页边距
-\def\companyrules@bottommargin{3.5cm}% 下页边距
-\def\companyrules@fontsize{15pt}
-\def\companyrules@lineheight{30pt}
-\def\companyrules@fakebold{3}
-\def\companyrules@indent{2em}
-\def\companyrules@primaryfont{STFangsong}
-\def\companyrules@titlefont{STZhongsong}
-\def\companyrules@titlesize{22pt}% 二号约22pt
-\def\companyrules@bracket{1} % 默认使用括号
+\def\companyrule@leftmargin{2.8cm}% 左页边距
+\def\companyrule@rightmargin{2.8cm}% 右页边距
+\def\companyrule@topmargin{3.7cm}% 上页边距
+\def\companyrule@bottommargin{3.5cm}% 下页边距
+\def\companyrule@fontsize{15pt}
+\def\companyrule@lineheight{30pt}
+\def\companyrule@fakebold{3}
+\def\companyrule@indent{2em}
+\def\companyrule@primaryfont{STFangsong}
+\def\companyrule@titlefont{STZhongsong}
+\def\companyrule@titlesize{22pt}% 二号约22pt
+\def\companyrule@bracket{1} % 默认使用括号
 
 % 声明类选项（使用中文字号标准）
 \DeclareOption{small}{%
-  \def\companyrules@fontsize{15pt}%          % 小三号约15pt
-  \def\companyrules@lineheight{30pt}%        % 适配小三号的行距
-  \def\companyrules@titlesize{22pt}%         % 二号约22pt
+  \def\companyrule@fontsize{15pt}%          % 小三号约15pt
+  \def\companyrule@lineheight{30pt}%        % 适配小三号的行距
+  \def\companyrule@titlesize{22pt}%         % 二号约22pt
 }
 
 \DeclareOption{large}{%
-  \def\companyrules@fontsize{16pt}%          % 三号约16pt
-  \def\companyrules@lineheight{32pt}%        % 适配三号的行距
-  \def\companyrules@titlesize{22pt}%         % 二号约22pt
+  \def\companyrule@fontsize{16pt}%          % 三号约16pt
+  \def\companyrule@lineheight{32pt}%        % 适配三号的行距
+  \def\companyrule@titlesize{22pt}%         % 二号约22pt
 }
 
 \DeclareOption{nobracket}{%
-  \def\companyrules@bracket{0}%              % 不使用括号
+  \def\companyrule@bracket{0}%              % 不使用括号
 }
 
 \DeclareOption{bracket}{%
-  \def\companyrules@bracket{1}%              % 使用括号（默认已启用）
+  \def\companyrule@bracket{1}%              % 使用括号（默认已启用）
 }
 
 % 处理未知选项
@@ -79,63 +79,63 @@
 % ==================== 页面布局设置 ====================
 
 % 使用参数化的页面设置
-\geometry{a4paper, left=\companyrules@leftmargin, right=\companyrules@rightmargin, top=\companyrules@topmargin, bottom=\companyrules@bottommargin}
-\ClassInfo{company-rules}{页面边距设置为: 左=\companyrules@leftmargin, 右=\companyrules@rightmargin, 上=\companyrules@topmargin, 下=\companyrules@bottommargin}
+\geometry{a4paper, left=\companyrule@leftmargin, right=\companyrule@rightmargin, top=\companyrule@topmargin, bottom=\companyrule@bottommargin}
+\ClassInfo{company-rules}{页面边距设置为: 左=\companyrule@leftmargin, 右=\companyrule@rightmargin, 上=\companyrule@topmargin, 下=\companyrule@bottommargin}
 
 % ==================== 字体设置与错误处理 ====================
 
 % 简化的字体设置，带错误处理
-\IfFontExistsTF{\companyrules@primaryfont}{%
-  \ClassInfo{company-rules}{找到主字体: \companyrules@primaryfont}%
-  \setCJKmainfont{\companyrules@primaryfont}[
+\IfFontExistsTF{\companyrule@primaryfont}{%
+  \ClassInfo{company-rules}{找到主字体: \companyrule@primaryfont}%
+  \setCJKmainfont{\companyrule@primaryfont}[
       BoldFont=*,
-      BoldFeatures={FakeBold=\companyrules@fakebold},
+      BoldFeatures={FakeBold=\companyrule@fakebold},
       ItalicFont=*,
       ItalicFeatures={FakeSlant=0.2}
   ]
 }{%
-  \ClassWarning{company-rules}{主字体 \companyrules@primaryfont\space 未找到，使用默认字体}%
+  \ClassWarning{company-rules}{主字体 \companyrule@primaryfont\space 未找到，使用默认字体}%
   \setCJKmainfont{SimSun}[
       BoldFont=*,
-      BoldFeatures={FakeBold=\companyrules@fakebold},
+      BoldFeatures={FakeBold=\companyrule@fakebold},
       ItalicFont=*,
       ItalicFeatures={FakeSlant=0.2}
   ]
 }
 
 % 定义标题字体命令
-\IfFontExistsTF{\companyrules@titlefont}{%
-  \ClassInfo{company-rules}{找到标题字体: \companyrules@titlefont}%
-  \newcommand{\companyrules@settitlefont}{\CJKfontspec{\companyrules@titlefont}[FakeBold=\companyrules@fakebold]}%
+\IfFontExistsTF{\companyrule@titlefont}{%
+  \ClassInfo{company-rules}{找到标题字体: \companyrule@titlefont}%
+  \newcommand{\companyrule@settitlefont}{\CJKfontspec{\companyrule@titlefont}[FakeBold=\companyrule@fakebold]}%
 }{%
-  \ClassWarning{company-rules}{标题字体 \companyrules@titlefont\space 未找到，使用默认字体}%
-  \newcommand{\companyrules@settitlefont}{\CJKfontspec{SimSun}[FakeBold=\companyrules@fakebold]}%
+  \ClassWarning{company-rules}{标题字体 \companyrule@titlefont\space 未找到，使用默认字体}%
+  \newcommand{\companyrule@settitlefont}{\CJKfontspec{SimSun}[FakeBold=\companyrule@fakebold]}%
 }
 
 % ==================== 字体大小和行距设置 ====================
 
 % 重新定义\normalsize命令，使用参数化设置
 \renewcommand{\normalsize}{%
-  \@setfontsize\normalsize{\companyrules@fontsize}{\companyrules@lineheight}%
+  \@setfontsize\normalsize{\companyrule@fontsize}{\companyrule@lineheight}%
   \linespread{1}%
   \selectfont%
 }
 
 % 设置段落首行缩进
-\setlength{\parindent}{\companyrules@indent}
+\setlength{\parindent}{\companyrule@indent}
 
 % ==================== 列表格式设置 ====================
 
 % 设置全局有序列表格式，使用参数化缩进
 \setlist[enumerate]{%
   label=（\chinese*）, 
-  wide=\companyrules@indent, 
+  wide=\companyrule@indent, 
   labelsep=0pt, 
   itemsep=0pt,
   parsep=\parskip,
   topsep=\parskip,
   partopsep=0pt, 
-  listparindent=\companyrules@indent%
+  listparindent=\companyrule@indent%
 }
 
 % ==================== 章节标题格式（统一设置）====================
@@ -145,15 +145,15 @@
     % 章标题设置
     section/name = {第,章},
     section/number = \chinese{section},
-    section/format = \centering\fontsize{\companyrules@fontsize}{\companyrules@lineheight}\companyrules@settitlefont\selectfont,
+    section/format = \centering\fontsize{\companyrule@fontsize}{\companyrule@lineheight}\companyrule@settitlefont\selectfont,
     % 条款标题设置（合并设置，消除冗余）
     subsection/name = {第,条},
     subsection/number = \chinese{subsection},
-    subsection/format = \fontsize{\companyrules@fontsize}{\companyrules@lineheight}\selectfont\bfseries,
+    subsection/format = \fontsize{\companyrule@fontsize}{\companyrule@lineheight}\selectfont\bfseries,
     subsection/aftername = {\hspace{0.5em}},
     subsection/beforeskip = 0pt,
     subsection/afterskip = 0pt,
-    subsection/indent = \companyrules@indent,
+    subsection/indent = \companyrule@indent,
 }
 
 % ==================== 条款编号格式 ====================
@@ -172,7 +172,7 @@
   \@ifundefined{subsection}{%
     \ClassError{company-rules}{subsection命令未定义}{请确保使用支持subsection的文档类}%
   }{%
-    \ifnum\companyrules@bracket=1
+    \ifnum\companyrule@bracket=1
       \subsection[#1]{（#1）}%
     \else
       \subsection[#1]{#1}%
@@ -193,7 +193,7 @@
 \makeatletter
 \let\original@title\title
 \renewcommand{\title}[1]{%
-  \original@title{\fontsize{\companyrules@titlesize}{\companyrules@titlesize}\companyrules@settitlefont\selectfont #1}%
+  \original@title{\fontsize{\companyrule@titlesize}{\companyrule@titlesize}\companyrule@settitlefont\selectfont #1}%
 }
 
 % 重定义\maketitle命令，控制标题与正文间的间距为一行
@@ -211,35 +211,35 @@
 
 % 提供配置查看命令（调试用）
 \makeatletter
-\newcommand{\showcompanyrulescfg}{%  
+\newcommand{\showcompanyrulecfg}{%  
   \typeout{=== Company Rules v2 配置信息 ===}%
-  \typeout{左页边距: \companyrules@leftmargin}%
-  \typeout{右页边距: \companyrules@rightmargin}%
-  \typeout{上页边距: \companyrules@topmargin}%
-  \typeout{下页边距: \companyrules@bottommargin}%
-  \typeout{正文字体大小: \meaning\companyrules@fontsize}%
-  \typeout{标题字体大小: \meaning\companyrules@titlesize}%
-  \typeout{行距: \companyrules@lineheight}%
-  \typeout{段落缩进: \companyrules@indent}%
-  \typeout{主字体: \companyrules@primaryfont}%
-  \typeout{标题字体: \companyrules@titlefont}%
-  \typeout{伪粗体强度: \companyrules@fakebold}%
+  \typeout{左页边距: \companyrule@leftmargin}%
+  \typeout{右页边距: \companyrule@rightmargin}%
+  \typeout{上页边距: \companyrule@topmargin}%
+  \typeout{下页边距: \companyrule@bottommargin}%
+  \typeout{正文字体大小: \meaning\companyrule@fontsize}%
+  \typeout{标题字体大小: \meaning\companyrule@titlesize}%
+  \typeout{行距: \companyrule@lineheight}%
+  \typeout{段落缩进: \companyrule@indent}%
+  \typeout{主字体: \companyrule@primaryfont}%
+  \typeout{标题字体: \companyrule@titlefont}%
+  \typeout{伪粗体强度: \companyrule@fakebold}%
   \typeout{===============================}%
 }
 \makeatother
 
 % 版本信息命令
-\newcommand{\companyruleslversion}{%
+\newcommand{\companyrulelversion}{%
   \ClassInfo{company-rules}{版本: 2.0, 日期: 2024-01-01}%
 }
 
 % 提供运行时配置修改命令
 \makeatletter
-\newcommand{\setcompanyrulescfg}[2]{%
-  \@ifundefined{companyrules@#1}{%
+\newcommand{\setcompanyrulecfg}[2]{%
+  \@ifundefined{companyrule@#1}{%
     \ClassWarning{company-rules}{未知配置项: #1}%
   }{%
-    \expandafter\def\csname companyrules@#1\endcsname{#2}%
+    \expandafter\def\csname companyrule@#1\endcsname{#2}%
     \ClassInfo{company-rules}{配置 #1 已更新为: #2}%
   }%
 }
