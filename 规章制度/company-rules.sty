@@ -43,15 +43,23 @@
     subsection/number = \arabic{subsection}
 }
 
-% 定义条款计数器
-\newcounter{article}
-\renewcommand{\thearticle}{第\chinese{article}条}
+% 设置article格式为subsection级别，使用条款编号格式
+\ctexset{
+    subsection/name = {第,条},
+    subsection/number = \chinese{subsection},
+    subsection/format = \normalsize\bfseries,
+    subsection/beforeskip = 0pt,
+    subsection/afterskip = 0pt,
+    subsection/indent = 2em,
+}
 
-% 定义条款标题命令，包含首行缩进、小三号字体和伪粗体格式，去除额外段间距
+% 重定义subsection标题显示格式
+\renewcommand{\thesubsection}{第\chinese{subsection}条}
+
+% 定义条款标题命令，直接使用subsection实现
 \newcommand{\article}[1]{%
-  \stepcounter{article}%
-  \par\noindent\hspace{2em}\textbf{\thearticle}\hspace{0.5em}\textbf{（#1）}\par%
-  \addcontentsline{toc}{subsection}{\thearticle\hspace{0.5em}（#1）}%
+  \subsection[#1]{#1}%
+  \normalfont%
 }
 
 % 设置页面样式为plain，显示页码在底部居中
