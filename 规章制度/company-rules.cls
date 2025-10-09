@@ -20,7 +20,10 @@
 % ==================== 参数化配置 ====================
 
 % 定义可配置参数的默认值（使用small配置作为默认）
-\def\companyrules@margin{1.5in}
+\def\companyrules@leftmargin{2.8cm}% 左页边距
+\def\companyrules@rightmargin{2.8cm}% 右页边距
+\def\companyrules@topmargin{3.7cm}% 上页边距
+\def\companyrules@bottommargin{3.5cm}% 下页边距
 \def\companyrules@fontsize{15pt}
 \def\companyrules@lineheight{30pt}
 \def\companyrules@fakebold{3}
@@ -34,14 +37,12 @@
 \DeclareOption{small}{%
   \def\companyrules@fontsize{15pt}%          % 小三号约15pt
   \def\companyrules@lineheight{30pt}%        % 适配小三号的行距
-  \def\companyrules@margin{1.5in}%
   \def\companyrules@titlesize{22pt}%         % 二号约22pt
 }
 
 \DeclareOption{large}{%
   \def\companyrules@fontsize{16pt}%          % 三号约16pt
   \def\companyrules@lineheight{32pt}%        % 适配三号的行距
-  \def\companyrules@margin{1.0in}%
   \def\companyrules@titlesize{22pt}%         % 二号约22pt
 }
 
@@ -78,8 +79,8 @@
 % ==================== 页面布局设置 ====================
 
 % 使用参数化的页面设置
-\geometry{a4paper, margin=\companyrules@margin}
-\ClassInfo{company-rules}{页面边距设置为: \companyrules@margin}
+\geometry{a4paper, left=\companyrules@leftmargin, right=\companyrules@rightmargin, top=\companyrules@topmargin, bottom=\companyrules@bottommargin}
+\ClassInfo{company-rules}{页面边距设置为: 左=\companyrules@leftmargin, 右=\companyrules@rightmargin, 上=\companyrules@topmargin, 下=\companyrules@bottommargin}
 
 % ==================== 字体设置与错误处理 ====================
 
@@ -210,9 +211,12 @@
 
 % 提供配置查看命令（调试用）
 \makeatletter
-\newcommand{\showcompanyrulescfg}{%
+\newcommand{\showcompanyrulescfg}{%  
   \typeout{=== Company Rules v2 配置信息 ===}%
-  \typeout{边距: \companyrules@margin}%
+  \typeout{左页边距: \companyrules@leftmargin}%
+  \typeout{右页边距: \companyrules@rightmargin}%
+  \typeout{上页边距: \companyrules@topmargin}%
+  \typeout{下页边距: \companyrules@bottommargin}%
   \typeout{正文字体大小: \meaning\companyrules@fontsize}%
   \typeout{标题字体大小: \meaning\companyrules@titlesize}%
   \typeout{行距: \companyrules@lineheight}%
