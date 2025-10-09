@@ -38,17 +38,24 @@
 
 ### 配置选项
 
-样式包支持两种配置选项：
+样式包支持多种配置选项：
 
 ```latex
-% 使用默认配置（small配置，小三号字体）
+% 使用默认配置（small配置，小三号字体，条款标题加括号）
 \usepackage{company-rules}
 
-% 显式指定small配置（小三号字体）
+% 显式指定small配置（小三号字体，条款标题加括号）
 \usepackage[small]{company-rules}
 
-% 使用large配置（三号字体）
+% 使用large配置（三号字体，条款标题加括号）
 \usepackage[large]{company-rules}
+
+% 使用nobracket选项（条款标题不加括号）
+\usepackage[nobracket]{company-rules}
+
+% 组合选项
+\usepackage[small,nobracket]{company-rules}
+\usepackage[large,nobracket]{company-rules}
 ```
 
 ## 模板功能

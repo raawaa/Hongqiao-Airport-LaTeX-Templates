@@ -6,10 +6,12 @@
 %% 日期：2024-01-01
 %% 
 %% 使用方法：
-%% \usepackage{company-rules-optimized-v2}
+%% \usepackage{company-rules}
 %% 或者使用预定义配置：
-%% \usepackage[small]{company-rules-optimized-v2}  % 小字体配置
-%% \usepackage[large]{company-rules-optimized-v2}  % 大字体配置
+%% \usepackage[small]{company-rules}  % 小字体配置
+%% \usepackage[large]{company-rules}  % 大字体配置
+%% \usepackage[nobracket]{company-rules}  % 条款标题不加括号
+%% \usepackage[small,nobracket]{company-rules}  % 组合选项
 %%
 
 \NeedsTeXFormat{LaTeX2e}
@@ -26,6 +28,7 @@
 \def\companyrules@primaryfont{STFangsong}
 \def\companyrules@titlefont{STZhongsong}
 \def\companyrules@titlesize{18pt}
+\def\companyrules@bracket{1} % 默认使用括号
 
 % 声明包选项（使用中文字号标准）
 \DeclareOption{small}{%
@@ -42,9 +45,17 @@
   \def\companyrules@titlesize{18pt}%         % 小二号约18pt
 }
 
+\DeclareOption{nobracket}{%
+  \def\companyrules@bracket{0}%              % 不使用括号
+}
+
+\DeclareOption{bracket}{%
+  \def\companyrules@bracket{1}%              % 使用括号（默认已启用）
+}
+
 % 处理未知选项
 \DeclareOption*{%
-  \PackageWarning{company-rules-optimized-v2}{未知选项 '\CurrentOption'，使用默认配置}%
+  \PackageWarning{company-rules}{未知选项 '\CurrentOption'，使用默认配置}%
 }
 
 % 处理选项
@@ -160,7 +171,11 @@
   \@ifundefined{subsection}{%
     \PackageError{company-rules}{subsection命令未定义}{请确保使用支持subsection的文档类}%
   }{%
-    \subsection[#1]{#1}%
+    \ifnum\companyrules@bracket=1
+      \subsection[#1]{（#1）}%
+    \else
+      \subsection[#1]{#1}%
+    \fi
     \normalfont%
   }%
 }
