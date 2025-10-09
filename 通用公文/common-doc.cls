@@ -51,12 +51,13 @@
 % ==================== 必要的宏包加载 ====================
 
 % 加载必要的宏包
+% 注意：已移除 titlesec 宏包，因其与 ctexart 可能存在兼容性问题。
 \RequirePackage{geometry}
 \RequirePackage{indentfirst}
 \RequirePackage{enumitem}
 \RequirePackage{datetime}
 \RequirePackage{remreset}
-\RequirePackage{titlesec}  % 添加titlesec宏包用于精确控制标题格式
+% \RequirePackage{titlesec}  % <-- 已移除
 
 % ==================== 页面布局设置 ====================
 
@@ -126,7 +127,7 @@
 % 重新定义\normalsize命令，使用参数化设置
 \renewcommand{\normalsize}{%
   \@setfontsize\normalsize{\commondoc@fontsize}{\commondoc@lineheight}%
-  \linespread{1}%
+  % \linespread{1}% <-- 移除，因为已直接设置 baselineskip
   \selectfont%
 }
 
@@ -187,7 +188,8 @@
 
 
 % 完全自定义paragraph命令实现
-\makeatletter
+% 注意：在 .cls 文件中，@ 字符默认可用，无需 \makeatletter/\makeatother
+
 % 定义内部段落计数器格式
 \def\theparagraph{（\arabic{paragraph}）}
 
@@ -214,12 +216,10 @@
   \theparagraph#1
   \endgroup
   \ignorespaces}
-\makeatother
 
 % ==================== 章节标题格式 ====================
 
 % 使用CTeX统一设置标题格式
-\makeatletter
 \ctexset{
   section = {
     format = \normalfont\commondoc@setboldfont,
@@ -258,7 +258,6 @@
     indent = \commondoc@indent
   }
 }
-\makeatother
 
 \setcounter{secnumdepth}{4}
 
@@ -270,7 +269,6 @@
 % ==================== 文档标题格式 ====================
 
 % 重定义\title命令，使其自动应用文档类的字体样式
-\makeatletter
 \let\original@title\title
 \renewcommand{\title}[1]{%
   \original@title{\fontsize{\commondoc@maintitlesize}{\commondoc@maintitlesize}\commondoc@settitlefont\selectfont #1}%
@@ -297,7 +295,7 @@
 % ==================== 辅助命令 ====================
 
 % 提供配置查看命令（调试用）
-\makeatletter
+% 注意：在 .cls 文件中，@ 字符默认可用，无需 \makeatletter/\makeatother
 \newcommand{\showcommondoccfg}{%  
   \typeout{=== Common Document v1 配置信息 ===}%
   \typeout{左页边距: \commondoc@leftmargin}%
@@ -329,7 +327,6 @@
     \ClassInfo{common-doc}{配置 #1 已更新为: #2}%
   }
 }
-\makeatother
 
 % 最后加载hyperref宏包，以确保超链接正常工作
 \RequirePackage{hyperref}
