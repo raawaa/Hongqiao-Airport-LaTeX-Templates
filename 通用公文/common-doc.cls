@@ -194,15 +194,43 @@
   {0pt}
 
 \setcounter{secnumdepth}{4}
-\titleformat{\paragraph}
-  {\fontsize{16pt}{32pt}\selectfont}
-  {（\arabic{paragraph}）}
-  {0pt}
-  {}
-\titlespacing*{\paragraph}
-  {2em}
-  {0pt}
-  {0pt}
+
+% 清除所有可能影响paragraph的titlesec设置
+\makeatletter
+\let\titleformat\relax
+\let\titlespacing*\relax
+\makeatother
+
+% 完全自定义paragraph命令实现
+\makeatletter
+% 定义内部段落计数器格式
+\def\theparagraph{（\arabic{paragraph}）}
+
+% 定义普通paragraph命令
+\def\paragraph{%
+  \@ifnextchar*\@paragraphstar\@paragraphnormal
+}
+
+% 普通段落版本（带换行）
+\def\@paragraphnormal#1{%
+  \refstepcounter{paragraph}%
+  \noindent\hspace*{2em}%
+  \begingroup
+  \fontsize{16pt}{32pt}\selectfont
+  \theparagraph#1\par
+  \endgroup
+}
+
+% 星号版本（不换行，正文直接跟随）
+\def\@paragraphstar*#1{%
+  \refstepcounter{paragraph}%
+  \begingroup
+  \fontsize{16pt}{32pt}\selectfont
+  \theparagraph#1
+  \endgroup
+  \ignorespaces
+}
+\makeatother
 
 % ==================== 页面样式设置 ====================
 
