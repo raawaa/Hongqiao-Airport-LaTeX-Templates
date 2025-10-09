@@ -12,6 +12,14 @@
 \RequirePackage{hyperref} % 添加超链接支持
 \geometry{a4paper, margin=1.2in} % 设置A4纸，边距1.2英寸
 
+% 重新定义\normalsize命令以设置固定行距
+% 小三号字体约为15pt，设置行距为30pt以匹配Word中的30磅行距
+\renewcommand{\normalsize}{%
+  \@setfontsize\normalsize{15pt}{30pt}%
+  \linespread{1}%
+  \selectfont
+}
+
 % 设置中文字体，正文使用仿宋，启用伪粗体功能
 \setCJKmainfont{STFangsong}[
     BoldFont=*,
@@ -19,9 +27,6 @@
     ItalicFont=*,
     ItalicFeatures={FakeSlant=0.2}
 ] % 正文使用仿宋，支持伪粗体
-
-% 设置全局字号为小三号
-\renewcommand{\normalsize}{\zihao{-3}}
 
 % 设置段落首行缩进为2字符
 \setlength{\parindent}{2em}
@@ -42,10 +47,10 @@
 \newcounter{article}
 \renewcommand{\thearticle}{第\chinese{article}条}
 
-% 定义条款标题命令，包含首行缩进、小三号字体和伪粗体格式
+% 定义条款标题命令，包含首行缩进、小三号字体和伪粗体格式，去除额外段间距
 \newcommand{\article}[1]{%
   \stepcounter{article}%
-  \subsection*{\hspace{2em}\textbf{\thearticle}\hspace{0.5em}\textbf{（#1）}}%
+  \par\noindent\hspace{2em}\textbf{\thearticle}\hspace{0.5em}\textbf{（#1）}\par%
   \addcontentsline{toc}{subsection}{\thearticle\hspace{0.5em}（#1）}%
 }
 
