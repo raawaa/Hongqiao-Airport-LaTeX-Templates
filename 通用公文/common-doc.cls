@@ -29,6 +29,8 @@
 \def\commondoc@maintitlesize{22pt}% 主标题字号
 \def\commondoc@subtitlefont{STKaiti}% 副标题字体
 
+% ==================== 选项处理 ====================
+
 % 声明类选项
 % 统一使用三号字，不再提供small和large选项
 
@@ -55,7 +57,6 @@
 \RequirePackage{datetime}
 \RequirePackage{remreset}
 \RequirePackage{titlesec}  % 添加titlesec宏包用于精确控制标题格式
-\RequirePackage{hyperref}  % hyperref通常应该在最后加载
 
 % ==================== 页面布局设置 ====================
 
@@ -130,19 +131,12 @@
 }
 
 % 设置段落首行缩进
-\setlength{\parindent}{2em}
-\ClassInfo{common-doc}{段落首行缩进设置为: 2em}
-
-
-
+\setlength{\parindent}{\commondoc@indent}
+\ClassInfo{common-doc}{段落首行缩进设置为: \commondoc@indent}
 
 % 使用titlesec的段落设置，确保首行缩进
-\usepackage{indentfirst}
-
 % 设置标题后段落的缩进
 \@afterindenttrue
-
-
 
 % ==================== 列表格式设置 ====================
 
@@ -158,71 +152,115 @@
 }
 
 
+% ==================== 行内标题命令变体 ====================
 
-% ==================== 章节标题格式 ====================
+% 真正的星号命令实现
+\let\original@subsection\subsection
+\let\original@subsubsection\subsubsection
 
-% 使用titlesec宏包精确控制标题格式
-\titleformat{\section}
-  {\fontsize{16pt}{32pt}\selectfont\commondoc@setboldfont}
-  {\chinese{section}、}
-  {0pt}
-  {}
-\titlespacing*{\section}
-  {2em}
-  {0pt}
-  {0pt}
+% 重定义 subsection 支持星号
+\renewcommand{\subsection}{%
+  \@ifstar
+    {\@subsection@star}
+    {\original@subsection}}
 
-\titleformat{\subsection}
-  {\fontsize{16pt}{32pt}\selectfont\commondoc@setsubtitlefont}
-  {（\chinese{subsection}）}
-  {0pt}
-  {}
-\titlespacing*{\subsection}
-  {2em}
-  {0pt}
-  {0pt}
+% 重定义 subsubsection 支持星号  
+\renewcommand{\subsubsection}{%
+  \@ifstar
+    {\@subsubsection@star}
+    {\original@subsubsection}}
 
-\titleformat{\subsubsection}
-  {\fontsize{16pt}{32pt}\selectfont}
-  {\arabic{subsubsection}. }
-  {0pt}
-  {}
-\titlespacing*{\subsubsection}
-  {2em}
-  {0pt}
-  {0pt}
 
-\setcounter{secnumdepth}{4}
+
+% 星号 subsection 实现
+\newcommand{\@subsection@star}[2][]{%
+  \stepcounter{subsection}%
+  {\normalfont\commondoc@setsubtitlefont（\chinese{subsection}）#2}\space%
+  \ignorespaces}
+
+% 星号 subsubsection 实现
+\newcommand{\@subsubsection@star}[2][]{%
+  \stepcounter{subsubsection}%
+  {\normalfont\arabic{subsubsection}. #2}\space%
+  \ignorespaces}
+
+
 
 % 完全自定义paragraph命令实现
 \makeatletter
 % 定义内部段落计数器格式
 \def\theparagraph{（\arabic{paragraph}）}
 
-% 定义普通paragraph命令
-\def\paragraph{%
-  \@ifnextchar*\@paragraphstar\@paragraphnormal
-}
+% 重定义 paragraph 支持星号
+\renewcommand{\paragraph}{%
+  \@ifstar
+    {\@paragraphstar}
+    {\@paragraphnormal}}
 
 % 普通段落版本（带换行）
-\def\@paragraphnormal#1{%
+\newcommand{\@paragraphnormal}[1]{%
   \refstepcounter{paragraph}%
-  \noindent\hspace*{2em}%
   \begingroup
-  \fontsize{16pt}{32pt}\selectfont
+  \normalfont
   \theparagraph#1\par
   \endgroup
 }
 
-% 星号版本（不换行，正文直接跟随）
-\def\@paragraphstar*#1{%
-  \refstepcounter{paragraph}%
+% 星号 paragraph 实现（不换行，正文直接跟随）
+\newcommand{\@paragraphstar}[1]{%
+  \stepcounter{paragraph}%
   \begingroup
-  \fontsize{16pt}{32pt}\selectfont
+  \normalfont
   \theparagraph#1
   \endgroup
-  \ignorespaces
-}\makeatother
+  \ignorespaces}
+\makeatother
+
+% ==================== 章节标题格式 ====================
+
+% 使用CTeX统一设置标题格式
+\makeatletter
+\ctexset{
+  section = {
+    format = \normalfont\commondoc@setboldfont,
+    name = {,、},
+    number = \chinese{section},
+    aftername = \hspace{0pt},
+    beforeskip = 0pt,
+    afterskip = 0pt,
+    indent = \commondoc@indent
+  },
+  subsection = {
+    format = \normalfont\commondoc@setsubtitlefont,
+    name = {（,）},
+    number = \chinese{subsection},
+    aftername = \hspace{0pt},
+    beforeskip = 0pt,
+    afterskip = 0pt,
+    indent = \commondoc@indent
+  },
+  subsubsection = {
+    format = \normalfont,
+    name = {,.\hspace{0.5em}},
+    number = \arabic{subsubsection},
+    aftername = \hspace{0pt},
+    beforeskip = 0pt,
+    afterskip = 0pt,
+    indent = \commondoc@indent
+  },
+  paragraph = {
+    format = \normalfont,
+    name = {（,）},
+    number = \arabic{paragraph},
+    aftername = \hspace{0pt},
+    beforeskip = 0pt,
+    afterskip = 0pt,
+    indent = \commondoc@indent
+  }
+}
+\makeatother
+
+\setcounter{secnumdepth}{4}
 
 % ==================== 页面样式设置 ====================
 
@@ -253,7 +291,6 @@
   \vspace{\baselineskip}% 添加一行行距
   \endgroup%
 }
-\makeatother
 
 
 
@@ -276,7 +313,7 @@
   \typeout{副标题字体: \commondoc@subtitlefont}%
   \typeout{伪粗体强度: \commondoc@fakebold}%
   \typeout{===============================}%
-}\makeatother
+}
 
 % 版本信息命令
 \newcommand{\commondocversion}{%
@@ -284,7 +321,6 @@
 }
 
 % 提供运行时配置修改命令
-\makeatletter
 \newcommand{\setcommondoccfg}[2]{%
   \@ifundefined{commondoc@#1}{%
     \ClassWarning{common-doc}{未知配置项: #1}%
@@ -292,38 +328,18 @@
     \expandafter\def\csname commondoc@#1\endcsname{#2}%
     \ClassInfo{common-doc}{配置 #1 已更新为: #2}%
   }
-}\makeatother
+}
+\makeatother
 
-% ==================== 行内标题命令变体 ====================
-
-% 真正的星号命令实现
-\makeatletter
-\let\original@subsection\subsection
-\let\original@subsubsection\subsubsection
-
-% 重定义 subsection 支持星号
-\renewcommand{\subsection}{%
-  \@ifstar
-    {\@subsection@star}
-    {\original@subsection}}
-
-% 重定义 subsubsection 支持星号  
-\renewcommand{\subsubsection}{%
-  \@ifstar
-    {\@subsubsection@star}
-    {\original@subsubsection}}
-
-% 星号 subsection 实现
-\newcommand{\@subsection@star}[2][]{%
-  \stepcounter{subsection}%
-  {\normalfont\fontsize{16pt}{32pt}\selectfont\commondoc@setsubtitlefont（\chinese{subsection}）#2}\space%
-  \ignorespaces}
-
-% 星号 subsubsection 实现
-\newcommand{\@subsubsection@star}[2][]{%
-  \stepcounter{subsubsection}%
-  {\normalfont\fontsize{16pt}{32pt}\selectfont\arabic{subsubsection}. #2}\space%
-  \ignorespaces}\makeatother
+% 最后加载hyperref宏包，以确保超链接正常工作
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  filecolor=black,
+  urlcolor=black,
+  citecolor=black
+}
 
 % 结束文档类定义
 \endinput
