@@ -1,24 +1,19 @@
-# LaTeX 基建项目合同模板使用说明
+# LaTeX 公司规章制度文档类使用说明
 
 ## 文件结构
 
 ```
 规章制度/
-├── company-rules.sty    # 公司规章制度样式包（核心模板）
-├── example.tex        # 使用示例
-└── README.md          # 本使用说明
+├── company-rules.cls    # 公司规章制度文档类（核心模板）
+├── example.tex          # 使用示例（文档类版本）
+├── example-small.tex    # 小字体配置示例
+└── README.md            # 本使用说明
 ```
 
 ## 使用方法
 
-### 方法1：使用样式包（推荐）
-
-1. 复制 `company-rules.sty` 到您的工作目录
-2. 创建新的 `.tex` 文件，引用样式包：
-
 ```latex
-\documentclass[UTF8]{ctexart}
-\usepackage{company-rules}  % 引用样式模板
+\documentclass{company-rules}  % 使用文档类
 
 % 设置文档信息
 \setdoctitle{您的文档标题}
@@ -38,24 +33,22 @@
 
 ### 配置选项
 
-样式包支持多种配置选项：
-
 ```latex
 % 使用默认配置（small配置，小三号字体，条款标题加括号）
-\usepackage{company-rules}
+\documentclass{company-rules}
 
-% 显式指定small配置（小三号字体，条款标题加括号）
-\usepackage[small]{company-rules}
+% 显式指定small配置
+\documentclass[small]{company-rules}
 
-% 使用large配置（三号字体，条款标题加括号）
-\usepackage[large]{company-rules}
+% 使用large配置
+\documentclass[large]{company-rules}
 
-% 使用nobracket选项（条款标题不加括号）
-\usepackage[nobracket]{company-rules}
+% 使用nobracket选项
+\documentclass[nobracket]{company-rules}
 
 % 组合选项
-\usepackage[small,nobracket]{company-rules}
-\usepackage[large,nobracket]{company-rules}
+\documentclass[small,nobracket]{company-rules}
+\documentclass[large,nobracket]{company-rules}
 ```
 
 ## 模板功能
@@ -100,17 +93,10 @@ xelatex 您的文件名.tex
 
 ## 注意事项
 
-1. 确保系统已安装所需字体（仿宋、华文中宋）
-2. 使用 XeLaTeX 编译器，不是 PDFLaTeX
-3. 条款中的百分号需要转义：`10\%`
-4. 如需修改样式，请编辑 `company-rules.sty` 文件
-
-## 扩展功能
-
-如需添加新功能，可以在 `company-rules.sty` 中添加：
-- 新的自定义命令
-- 额外的宏包引用
-- 自定义环境
-- 特殊格式设置
+1. 使用文档类方式无需手动加载`ctexart`
+2. 确保系统已安装所需字体（仿宋、华文中宋）
+3. 使用 XeLaTeX 编译器，不是 PDFLaTeX
+4. 条款中的百分号需要转义：`10\%`
+5. 修改样式请直接编辑 `company-rules.cls` 文件
 
 也可使用 `\setcompanyrulescfg{参数名}{参数值}` 命令在文档中动态修改配置。

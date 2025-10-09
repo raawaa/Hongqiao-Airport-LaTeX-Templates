@@ -1,21 +1,21 @@
 % !TeX program = XeLaTeX
 % !TeX encoding = UTF-8
 %%
-%% 公司规章制度LaTeX样式包 (优化版本 v2.0)
-%% 版本：2.0 - 简化稳定版
+%% 公司规章制度LaTeX文档类 (优化版本 v2.0)
+%% 版本：2.0 - 文档类版本
 %% 日期：2024-01-01
 %% 
 %% 使用方法：
-%% \usepackage{company-rules}
+%% \documentclass{company-rules}
 %% 或者使用预定义配置：
-%% \usepackage[small]{company-rules}  % 小字体配置
-%% \usepackage[large]{company-rules}  % 大字体配置
-%% \usepackage[nobracket]{company-rules}  % 条款标题不加括号
-%% \usepackage[small,nobracket]{company-rules}  % 组合选项
+%% \documentclass[small]{company-rules}  % 小字体配置
+%% \documentclass[large]{company-rules}  % 大字体配置
+%% \documentclass[nobracket]{company-rules}  % 条款标题不加括号
+%% \documentclass[small,nobracket]{company-rules}  % 组合选项
 %%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{company-rules}[2024-01-01 v2.0 公司规章制度样式包优化版]
+\ProvidesClass{company-rules}[2024-01-01 v2.0 公司规章制度文档类]
 
 % ==================== 参数化配置 ====================
 
@@ -30,7 +30,7 @@
 \def\companyrules@titlesize{18pt}
 \def\companyrules@bracket{1} % 默认使用括号
 
-% 声明包选项（使用中文字号标准）
+% 声明类选项（使用中文字号标准）
 \DeclareOption{small}{%
   \def\companyrules@fontsize{15pt}%          % 小三号约15pt
   \def\companyrules@lineheight{30pt}%        % 适配小三号的行距
@@ -55,54 +55,37 @@
 
 % 处理未知选项
 \DeclareOption*{%
-  \PackageWarning{company-rules}{未知选项 '\CurrentOption'，使用默认配置}%
+  \PassOptionsToClass{\CurrentOption}{ctexart}%
+  \PackageWarning{company-rules}{未知选项 '\CurrentOption'，传递给ctexart文档类}%
 }
 
 % 处理选项
 \ProcessOptions\relax
 
-% ==================== 条件宏包加载 ====================
+% ==================== 基础文档类设置 ====================
 
-% 条件加载必要的宏包，避免重复加载
-\@ifpackageloaded{enumitem}{%
-  \PackageInfo{company-rules}{enumitem 已加载}%
-}{%
-  \RequirePackage{enumitem}%
-  \PackageInfo{company-rules}{加载 enumitem 宏包}%
-}
+% 加载基础文档类ctexart，并传递所有未知选项
+\LoadClass[a4paper]{ctexart}
 
-\@ifpackageloaded{geometry}{%
-  \PackageInfo{company-rules}{geometry 已加载}%
-}{%
-  \RequirePackage{geometry}%
-  \PackageInfo{company-rules}{加载 geometry 宏包}%
-}
+% ==================== 必要的宏包加载 ====================
 
-\@ifpackageloaded{hyperref}{%
-  \PackageInfo{company-rules}{hyperref 已加载}%
-}{%
-  \RequirePackage{hyperref}%
-  \PackageInfo{company-rules}{加载 hyperref 宏包}%
-}
-
-\@ifpackageloaded{remreset}{%
-  \PackageInfo{company-rules}{remreset 已加载}%
-}{%
-  \RequirePackage{remreset}%
-  \PackageInfo{company-rules}{加载 remreset 宏包}%
-}
+% 加载必要的宏包
+\RequirePackage{geometry}
+\RequirePackage{enumitem}
+\RequirePackage{hyperref}
+\RequirePackage{remreset}
 
 % ==================== 页面布局设置 ====================
 
 % 使用参数化的页面设置
 \geometry{a4paper, margin=\companyrules@margin}
-\PackageInfo{company-rules}{页面边距设置为: \companyrules@margin}
+\ClassInfo{company-rules}{页面边距设置为: \companyrules@margin}
 
 % ==================== 字体设置与错误处理 ====================
 
 % 简化的字体设置，带错误处理
 \IfFontExistsTF{\companyrules@primaryfont}{%
-  \PackageInfo{company-rules}{找到主字体: \companyrules@primaryfont}%
+  \ClassInfo{company-rules}{找到主字体: \companyrules@primaryfont}%
   \setCJKmainfont{\companyrules@primaryfont}[
       BoldFont=*,
       BoldFeatures={FakeBold=\companyrules@fakebold},
@@ -110,7 +93,7 @@
       ItalicFeatures={FakeSlant=0.2}
   ]
 }{%
-  \PackageWarning{company-rules}{主字体 \companyrules@primaryfont\space 未找到，使用默认字体}%
+  \ClassWarning{company-rules}{主字体 \companyrules@primaryfont\space 未找到，使用默认字体}%
   \setCJKmainfont{SimSun}[
       BoldFont=*,
       BoldFeatures={FakeBold=\companyrules@fakebold},
@@ -121,10 +104,10 @@
 
 % 定义标题字体命令
 \IfFontExistsTF{\companyrules@titlefont}{%
-  \PackageInfo{company-rules}{找到标题字体: \companyrules@titlefont}%
+  \ClassInfo{company-rules}{找到标题字体: \companyrules@titlefont}%
   \newcommand{\companyrules@settitlefont}{\CJKfontspec{\companyrules@titlefont}}%
 }{%
-  \PackageWarning{company-rules}{标题字体 \companyrules@titlefont\space 未找到，使用默认字体}%
+  \ClassWarning{company-rules}{标题字体 \companyrules@titlefont\space 未找到，使用默认字体}%
   \newcommand{\companyrules@settitlefont}{\CJKfontspec{SimSun}}%
 }
 
@@ -163,6 +146,7 @@
     subsection/name = {第,条},
     subsection/number = \chinese{subsection},
     subsection/format = \fontsize{\companyrules@fontsize}{\companyrules@lineheight}\selectfont\bfseries,
+    subsection/aftername = {\hspace{0.5em}},
     subsection/beforeskip = 0pt,
     subsection/afterskip = 0pt,
     subsection/indent = \companyrules@indent,
@@ -182,7 +166,7 @@
 \makeatletter
 \newcommand{\article}[1]{%
   \@ifundefined{subsection}{%
-    \PackageError{company-rules}{subsection命令未定义}{请确保使用支持subsection的文档类}%
+    \ClassError{company-rules}{subsection命令未定义}{请确保使用支持subsection的文档类}%
   }{%
     \ifnum\companyrules@bracket=1
       \subsection[#1]{（#1）}%
@@ -201,12 +185,14 @@
 
 % ==================== 文档标题格式 ====================
 
-% 设置文档标题格式，使用参数化字体
+% 重定义\title命令，使其自动应用文档类的字体样式
 \makeatletter
-\newcommand{\setdoctitle}[1]{%
-  \title{\fontsize{\companyrules@titlesize}{\companyrules@titlesize}\companyrules@settitlefont\selectfont #1}%
+\let\original@title\title
+\renewcommand{\title}[1]{%
+  \original@title{\fontsize{\companyrules@titlesize}{\companyrules@titlesize}\companyrules@settitlefont\selectfont #1}%
 }
 \makeatother
+
 
 % ==================== 辅助命令 ====================
 
@@ -228,20 +214,20 @@
 
 % 版本信息命令
 \newcommand{\companyruleslversion}{%
-  \PackageInfo{company-rules}{版本: 2.0, 日期: 2024-01-01}%
+  \ClassInfo{company-rules}{版本: 2.0, 日期: 2024-01-01}%
 }
 
 % 提供运行时配置修改命令
 \makeatletter
 \newcommand{\setcompanyrulescfg}[2]{%
   \@ifundefined{companyrules@#1}{%
-    \PackageWarning{company-rules}{未知配置项: #1}%
+    \ClassWarning{company-rules}{未知配置项: #1}%
   }{%
     \expandafter\def\csname companyrules@#1\endcsname{#2}%
-    \PackageInfo{company-rules}{配置 #1 已更新为: #2}%
+    \ClassInfo{company-rules}{配置 #1 已更新为: #2}%
   }%
 }
 \makeatother
 
-% 结束宏包定义
+% 结束文档类定义
 \endinput
