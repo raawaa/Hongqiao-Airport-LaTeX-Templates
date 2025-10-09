@@ -1,17 +1,9 @@
-# LaTeX 通用公文文档类使用说明
+# LaTeX 通用公文文档类使用说明（common-doc v1.1）
 
-## 文件结构
 
-```
-通用公文/
-├── common-doc.cls    # 通用公文文档类（核心模板）
-├── example.tex         # 使用示例
-└── README.md           # 本使用说明
-```
+## 快速开始
 
-## 使用方法
-
-### 基础使用
+### 最小示例
 
 ```latex
 % !TeX program = XeLaTeX
@@ -19,100 +11,112 @@
 
 \documentclass{common-doc}
 
-\title{文档标题}
+\title{关于加强机场安全管理工作的通知}
 
 \begin{document}
-
 \maketitle
-\docorgan{发文机关}
-\docnumber{文件编号}
-\docdate{发文日期}
-\vspace{1em}
-\docrecipient{主送机关}
 
-% 文档正文内容
+% 一级标题（中文序号 + 顿号）
+\section{提高安全意识，落实安全责任}
 
-\doccc{抄送机关}
-\docattachment{附件列表}
-\doctopic{主题词}
+% 二级标题（带星号形态为“行内标题”，不换行）
+\subsection*{加强组织领导}
+行内说明文字……
+
+% 三级标题（阿拉伯数字序号）
+\subsubsection{具体措施}
+正文……
+
+% 四级标题（段内编号样式：（1）（2）…）
+\paragraph{具体要求}
+正文……
+
+% 无额外上下间距的列表
+\begin{enumerate}
+  \item 每月组织一次全面检查；
+  \item 建立台账并闭环整改。
+\end{enumerate}
 
 \end{document}
 ```
 
-### 字体配置
+### 固定行距与字号
 
-文档类统一使用三号字作为正文字体，无需额外配置选项：
+- **正文字号**: 默认 16pt（三号）
+- **行距**: 默认 30pt，采用“固定行距”策略（禁用自动拉伸），版式更贴近办公软件排版。
 
-```latex
-\documentclass{common-doc}  % 统一使用三号字
-```
+### 页面边距（A4）
 
-- **small**: 正文字号约15pt，行距30pt
-- **large**: 正文字号约16pt，行距32pt
+- 左 2.8cm  右 2.8cm  上 3.7cm  下 3.5cm
 
-### 页面边距
+## 功能与用法
 
-页面边距已统一设置为：
-- 左页边距: 2.8cm
-- 右页边距: 2.8cm
-- 上页边距: 3.7cm
-- 下页边距: 3.5cm
+### 标题体系
 
-## 特色功能
+- `\section`：中文数字编号，形如“一、二、三、…”，粗体；
+- `\subsection`：中文括号编号，形如“（一）（二）…”，采用楷体；
+- `\subsubsection`：阿拉伯数字“1. 2. 3.”；
+- `\paragraph`：段内编号“（1）（2）…”。
 
-### 公文特有命令
+带星号形式（如 `\subsection*{...}`、`\subsubsection*{...}`、`\paragraph*{...}`）提供“行内标题”效果：编号仍递增，但不另起一段，紧随其后为正文，更适合条例式结构。
 
-1. **\docorgan{机关名称}**: 设置发文机关
-2. **\docnumber{文号}**: 设置文件编号
-3. **\docdate{日期}**: 设置发文日期
-4. **\docrecipient{机关}**: 设置主送机关
-5. **\doccc{机关}**: 设置抄送机关
-6. **\docattachment{附件}**: 设置附件列表
-7. **\doctopic{主题词}**: 设置主题词
+### 列表与段落
 
-### 动态配置参数
+- 默认保留 `2em` 首行缩进；
+- `enumerate` 列表已去除额外上下间距，列表内外行距一致。
 
-文档类支持在文档中动态修改配置参数，使用 `\setofficialdoccfg{参数名}{参数值}` 命令：
+### 动态配置
+
+在文档中可通过 `\setcommondoccfg{键}{值}` 动态调整配置，例如：
 
 ```latex
-\setofficialdoccfg{fontsize}{16pt}     % 修改正文字体大小
-\setofficialdoccfg{lineheight}{32pt}   % 修改行距
-\setofficialdoccfg{leftmargin}{3cm}    % 修改左页边距
+% 版面与排版
+\setcommondoccfg{leftmargin}{3cm}
+\setcommondoccfg{rightmargin}{2.6cm}
+\setcommondoccfg{topmargin}{3.7cm}
+\setcommondoccfg{bottommargin}{3.5cm}
+\setcommondoccfg{indent}{2em}
+
+% 字体与字号
+\setcommondoccfg{fontsize}{16pt}          % 正文字号（三号）
+\setcommondoccfg{lineheight}{30pt}        % 固定行距
+\setcommondoccfg{primaryfont}{STFangsong} % 仿宋（正文）
+\setcommondoccfg{titlefont}{STZhongsong}  % 中宋（标题）
+\setcommondoccfg{maintitlesize}{22pt}     % 主标题字号
+\setcommondoccfg{subtitlefont}{STKaiti}   % 楷体（副标题）
+\setcommondoccfg{subtitlefontsize}{16.5pt}% 副标题字号
+\setcommondoccfg{fakebold}{3}             % 伪粗体强度
 ```
 
-可配置的参数包括：
-- `leftmargin`: 左页边距（例如：`2.8cm`）
-- `rightmargin`: 右页边距（例如：`2.8cm`）
-- `topmargin`: 上页边距（例如：`3.7cm`）
-- `bottommargin`: 下页边距（例如：`3.5cm`）
-- `fontsize`: 正文字体大小（例如：`15pt`）
-- `lineheight`: 行距（例如：`30pt`）
-- `fakebold`: 伪粗体强度（例如：`3`）
-- `indent`: 段落首行缩进（例如：`2em`）
-- `primaryfont`: 正文字体（例如：`STFangsong`）
-- `titlefont`: 标题字体（例如：`STZhongsong`）
-- `maintitlesize`: 主标题字体大小（例如：`22pt`）
-- `subtitlefont`: 副标题字体（例如：`STKaiti`）
+支持的键包括但不限于：
 
-### 调试命令
+- `leftmargin`、`rightmargin`、`topmargin`、`bottommargin`
+- `fontsize`、`lineheight`
+- `indent`
+- `primaryfont`、`titlefont`、`maintitlesize`
+- `subtitlefont`、`subtitlefontsize`、`subtitlebaseline`
+- `fakebold`
 
-- `\showofficialdoccfg`: 显示当前配置信息（用于调试）
+### 调试与版本信息
+
+- `\showcommondoccfg`：在编译日志中输出当前关键配置（行距、字号、字体等）；
+- `\commondocversion`：在编译信息中输出文档类版本与日期。
 
 ## 环境要求
 
 - **LaTeX 发行版**: TeX Live 2020+ 或 MiKTeX 2.9+
-- **编译器**: XeLaTeX（支持中文系统字体）
-- **必需字体**: 仿宋、华文中宋、楷体
+- **编译器**: XeLaTeX（需 `fontspec`/`ctex` 支持中文系统字体）
+- **字体建议**: `STFangsong`、`STZhongsong`、`STKaiti`（缺失时自动回退到 `SimSun`、`SimHei`、`KaiTi` 并给出警告）
 
 ## 编译方法
 
-使用 XeLaTeX 编译：
+使用 XeLaTeX 编译（建议在同一目录中执行）：
 
 ```bash
 xelatex example.tex
 ```
 
-如需生成目录，需要编译两次：
+生成目录或引用时请至少编译两次：
 
 ```bash
 xelatex example.tex
