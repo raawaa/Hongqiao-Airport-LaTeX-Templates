@@ -23,11 +23,11 @@
 \def\companyrules@margin{1.5in}
 \def\companyrules@fontsize{15pt}
 \def\companyrules@lineheight{30pt}
-\def\companyrules@fakebold{3}
+\def\companyrules@fakebold{4}
 \def\companyrules@indent{2em}
 \def\companyrules@primaryfont{STFangsong}
 \def\companyrules@titlefont{STZhongsong}
-\def\companyrules@titlesize{18pt}
+\def\companyrules@titlesize{22pt}% 二号约22pt
 \def\companyrules@bracket{1} % 默认使用括号
 
 % 声明类选项（使用中文字号标准）
@@ -35,14 +35,14 @@
   \def\companyrules@fontsize{15pt}%          % 小三号约15pt
   \def\companyrules@lineheight{30pt}%        % 适配小三号的行距
   \def\companyrules@margin{1.5in}%
-  \def\companyrules@titlesize{18pt}%         % 小二号约18pt
+  \def\companyrules@titlesize{22pt}%         % 二号约22pt
 }
 
 \DeclareOption{large}{%
   \def\companyrules@fontsize{16pt}%          % 三号约16pt
   \def\companyrules@lineheight{32pt}%        % 适配三号的行距
   \def\companyrules@margin{1.0in}%
-  \def\companyrules@titlesize{18pt}%         % 小二号约18pt
+  \def\companyrules@titlesize{22pt}%         % 二号约22pt
 }
 
 \DeclareOption{nobracket}{%
@@ -105,10 +105,10 @@
 % 定义标题字体命令
 \IfFontExistsTF{\companyrules@titlefont}{%
   \ClassInfo{company-rules}{找到标题字体: \companyrules@titlefont}%
-  \newcommand{\companyrules@settitlefont}{\CJKfontspec{\companyrules@titlefont}}%
+  \newcommand{\companyrules@settitlefont}{\CJKfontspec{\companyrules@titlefont}[FakeBold=\companyrules@fakebold]}%
 }{%
   \ClassWarning{company-rules}{标题字体 \companyrules@titlefont\space 未找到，使用默认字体}%
-  \newcommand{\companyrules@settitlefont}{\CJKfontspec{SimSun}}%
+  \newcommand{\companyrules@settitlefont}{\CJKfontspec{SimSun}[FakeBold=\companyrules@fakebold]}%
 }
 
 % ==================== 字体大小和行距设置 ====================
