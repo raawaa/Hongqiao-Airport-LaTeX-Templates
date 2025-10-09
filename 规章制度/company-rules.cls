@@ -130,7 +130,10 @@
   label=（\chinese*）, 
   wide=\companyrules@indent, 
   labelsep=0pt, 
-  itemsep=0pt, 
+  itemsep=0pt,
+  parsep=\parskip,
+  topsep=\parskip,
+  partopsep=0pt, 
   listparindent=\companyrules@indent%
 }
 
@@ -141,7 +144,7 @@
     % 章标题设置
     section/name = {第,章},
     section/number = \chinese{section},
-    section/format = \centering\fontsize{\companyrules@titlesize}{\companyrules@titlesize}\companyrules@settitlefont\selectfont,
+    section/format = \centering\fontsize{\companyrules@fontsize}{\companyrules@lineheight}\companyrules@settitlefont\selectfont,
     % 条款标题设置（合并设置，消除冗余）
     subsection/name = {第,条},
     subsection/number = \chinese{subsection},
