@@ -193,6 +193,7 @@
   {0pt}
   {0pt}
 
+\setcounter{secnumdepth}{4}
 \titleformat{\paragraph}
   {\fontsize{16pt}{32pt}\selectfont}
   {（\arabic{paragraph}）}
