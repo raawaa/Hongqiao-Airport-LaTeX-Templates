@@ -7,9 +7,7 @@
 %% 
 %% 使用方法：
 %% \documentclass{common-doc}
-%% 或者使用预定义配置：
-%% \documentclass[small]{common-doc}  % 小字体配置
-%% \documentclass[large]{common-doc}  % 大字体配置
+%% 统一使用三号字配置
 %%
 
 \NeedsTeXFormat{LaTeX2e}
@@ -37,7 +35,7 @@
 % 处理未知选项
 \DeclareOption*{%
   \PassOptionsToClass{\CurrentOption}{ctexart}%
-  \PackageWarning{official-doc}{未知选项 '\CurrentOption'，传递给ctexart文档类}%
+  \PackageWarning{common-doc}{未知选项 '\CurrentOption'，传递给ctexart文档类}%
 }
 
 % 处理选项
@@ -52,23 +50,24 @@
 
 % 加载必要的宏包
 \RequirePackage{geometry}
+\RequirePackage{indentfirst}
 \RequirePackage{enumitem}
-\RequirePackage{hyperref}
-\RequirePackage{remreset}
 \RequirePackage{datetime}
+\RequirePackage{remreset}
 \RequirePackage{titlesec}  % 添加titlesec宏包用于精确控制标题格式
+\RequirePackage{hyperref}  % hyperref通常应该在最后加载
 
 % ==================== 页面布局设置 ====================
 
 % 使用参数化的页面设置
 \geometry{a4paper, left=\commondoc@leftmargin, right=\commondoc@rightmargin, top=\commondoc@topmargin, bottom=\commondoc@bottommargin}
-\ClassInfo{official-doc}{页面边距设置为: 左=\commondoc@leftmargin, 右=\commondoc@rightmargin, 上=\commondoc@topmargin, 下=\commondoc@bottommargin}
+\ClassInfo{common-doc}{页面边距设置为: 左=\commondoc@leftmargin, 右=\commondoc@rightmargin, 上=\commondoc@topmargin, 下=\commondoc@bottommargin}
 
 % ==================== 字体设置与错误处理 ====================
 
 % 简化的字体设置，带错误处理
 \IfFontExistsTF{\commondoc@primaryfont}{%
-  \ClassInfo{official-doc}{找到主字体: \commondoc@primaryfont}%
+  \ClassInfo{common-doc}{找到主字体: \commondoc@primaryfont}%
   \setCJKmainfont{\commondoc@primaryfont}[
       BoldFont=*,
       BoldFeatures={FakeBold=\commondoc@fakebold},
@@ -76,7 +75,7 @@
       ItalicFeatures={FakeSlant=0.2}
   ]
 }{%
-  \ClassWarning{official-doc}{主字体 \commondoc@primaryfont\space 未找到，使用默认字体}%
+  \ClassWarning{common-doc}{主字体 \commondoc@primaryfont\space 未找到，使用默认字体}%
   \setCJKmainfont{SimSun}[
       BoldFont=*,
       BoldFeatures={FakeBold=\commondoc@fakebold},
@@ -87,38 +86,38 @@
 
 % 定义标题字体命令
 \IfFontExistsTF{\commondoc@titlefont}{%
-  \ClassInfo{official-doc}{找到标题字体: \commondoc@titlefont}%
+  \ClassInfo{common-doc}{找到标题字体: \commondoc@titlefont}%
   \newcommand{\commondoc@settitlefont}{\CJKfontspec{\commondoc@titlefont}[FakeBold=\commondoc@fakebold]}%
 }{%
-  \ClassWarning{official-doc}{标题字体 \commondoc@titlefont\space 未找到，使用默认字体}%
+  \ClassWarning{common-doc}{标题字体 \commondoc@titlefont\space 未找到，使用默认字体}%
   \newcommand{\commondoc@settitlefont}{\CJKfontspec{SimSun}[FakeBold=\commondoc@fakebold]}%
 }
 
 % 定义黑体字命令
 \IfFontExistsTF{STHeiti}{%
-  \ClassInfo{official-doc}{找到黑体: STHeiti}%
+  \ClassInfo{common-doc}{找到黑体: STHeiti}%
   \newcommand{\commondoc@setboldfont}{\CJKfontspec{STHeiti}}%
 }{%
-  \ClassWarning{official-doc}{黑体 STHeiti 未找到，使用默认字体}%
+  \ClassWarning{common-doc}{黑体 STHeiti 未找到，使用默认字体}%
   \newcommand{\commondoc@setboldfont}{\CJKfontspec{SimHei}}%
 }
 
 % 定义副标题字体命令（楷体）
 \IfFontExistsTF{STKaiti}{%
-  \ClassInfo{official-doc}{找到楷体: STKaiti}%
+  \ClassInfo{common-doc}{找到楷体: STKaiti}%
   \newcommand{\commondoc@setsubtitlefont}{\CJKfontspec{STKaiti}}%
 }{%
-  \ClassWarning{official-doc}{楷体 STKaiti 未找到，使用默认字体}%
+  \ClassWarning{common-doc}{楷体 STKaiti 未找到，使用默认字体}%
   \newcommand{\commondoc@setsubtitlefont}{\CJKfontspec{KaiTi}}%
 }
 
 % 定义仿宋体字命令
 \IfFontExistsTF{STFangsong}{%
-  \ClassInfo{official-doc}{找到仿宋体: STFangsong}%
+  \ClassInfo{common-doc}{找到仿宋体: STFangsong}%
   \newcommand{\commondoc@setfongsongfont}{\CJKfontspec{STFangsong}}%
 }{%
-  \ClassWarning{official-doc}{仿宋体 STFangsong 未找到，使用默认字体}%
-  \newcommand{\commondoc@setfongsongfont}{\CJKfontspec{STFangsong}}%
+  \ClassWarning{common-doc}{仿宋体 STFangsong 未找到，使用默认字体}%
+  \newcommand{\commondoc@setfongsongfont}{\CJKfontspec{SimSun}}%
 }
 
 % ==================== 字体大小和行距设置 ====================
@@ -132,7 +131,7 @@
 
 % 设置段落首行缩进
 \setlength{\parindent}{2em}
-\ClassInfo{official-doc}{段落首行缩进设置为: 2em}
+\ClassInfo{common-doc}{段落首行缩进设置为: 2em}
 
 
 
@@ -195,12 +194,6 @@
 
 \setcounter{secnumdepth}{4}
 
-% 清除所有可能影响paragraph的titlesec设置
-\makeatletter
-\let\titleformat\relax
-\let\titlespacing*\relax
-\makeatother
-
 % 完全自定义paragraph命令实现
 \makeatletter
 % 定义内部段落计数器格式
@@ -229,8 +222,7 @@
   \theparagraph#1
   \endgroup
   \ignorespaces
-}
-\makeatother
+}\makeatother
 
 % ==================== 页面样式设置 ====================
 
@@ -270,7 +262,7 @@
 % 提供配置查看命令（调试用）
 \makeatletter
 \newcommand{\showcommondoccfg}{%  
-  \typeout{=== Official Document v1 配置信息 ===}%
+  \typeout{=== Common Document v1 配置信息 ===}%
   \typeout{左页边距: \commondoc@leftmargin}%
   \typeout{右页边距: \commondoc@rightmargin}%
   \typeout{上页边距: \commondoc@topmargin}%
@@ -284,51 +276,25 @@
   \typeout{副标题字体: \commondoc@subtitlefont}%
   \typeout{伪粗体强度: \commondoc@fakebold}%
   \typeout{===============================}%
-}
-\makeatother
+}\makeatother
 
 % 版本信息命令
 \newcommand{\commondocversion}{%
-  \ClassInfo{official-doc}{版本: 1.0, 日期: 2024-01-01}%
+  \ClassInfo{common-doc}{版本: 1.0, 日期: 2024-01-01}%
 }
 
 % 提供运行时配置修改命令
 \makeatletter
 \newcommand{\setcommondoccfg}[2]{%
   \@ifundefined{commondoc@#1}{%
-    \ClassWarning{official-doc}{未知配置项: #1}%
+    \ClassWarning{common-doc}{未知配置项: #1}%
   }{%
     \expandafter\def\csname commondoc@#1\endcsname{#2}%
-    \ClassInfo{official-doc}{配置 #1 已更新为: #2}%
+    \ClassInfo{common-doc}{配置 #1 已更新为: #2}%
   }
-}
-\makeatother
+}\makeatother
 
 % ==================== 行内标题命令变体 ====================
-
-% 定义行内subsection命令（使用星号版本）
-\makeatletter
-\newcommand{\subsection@inline}[1]{%
-  {\normalfont\fontsize{16pt}{32pt}\selectfont\commondoc@setsubtitlefont（\chinese{subsection}）#1}\space%
-  \refstepcounter{subsection}%
-}
-\makeatother
-
-% 定义行内subsubsection命令（使用星号版本）
-\makeatletter  
-\newcommand{\subsubsection@inline}[1]{%
-  {\normalfont\fontsize{16pt}{32pt}\selectfont\arabic{subsubsection}. #1}\space%
-  \refstepcounter{subsubsection}%
-}
-\makeatother
-
-% 支持星号命令的简单实现
-\makeatletter
-\newcommand{\subsection@star}[1]{%
-  {\normalfont\fontsize{16pt}{32pt}\selectfont\commondoc@setsubtitlefont（\chinese{subsection}）#1}\space%
-  \refstepcounter{subsection}%
-}
-\makeatother
 
 % 真正的星号命令实现
 \makeatletter
@@ -357,8 +323,7 @@
 \newcommand{\@subsubsection@star}[2][]{%
   \stepcounter{subsubsection}%
   {\normalfont\fontsize{16pt}{32pt}\selectfont\arabic{subsubsection}. #2}\space%
-  \ignorespaces}
-\makeatother
+  \ignorespaces}\makeatother
 
 % 结束文档类定义
 \endinput
