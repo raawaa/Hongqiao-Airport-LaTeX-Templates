@@ -85,6 +85,13 @@
   \PackageInfo{company-rules}{加载 hyperref 宏包}%
 }
 
+\@ifpackageloaded{remreset}{%
+  \PackageInfo{company-rules}{remreset 已加载}%
+}{%
+  \RequirePackage{remreset}%
+  \PackageInfo{company-rules}{加载 remreset 宏包}%
+}
+
 % ==================== 页面布局设置 ====================
 
 % 使用参数化的页面设置
@@ -166,7 +173,13 @@
 % 重定义subsection标题显示格式
 \renewcommand{\thesubsection}{第\chinese{subsection}条}
 
+% 将条款计数器从section中分离，使其在整个文档中连续编号
+\makeatletter
+\@removefromreset{subsection}{section}
+\makeatother
+
 % 定义条款标题命令，增加错误处理
+\makeatletter
 \newcommand{\article}[1]{%
   \@ifundefined{subsection}{%
     \PackageError{company-rules}{subsection命令未定义}{请确保使用支持subsection的文档类}%
@@ -179,6 +192,7 @@
     \normalfont%
   }%
 }
+\makeatother
 
 % ==================== 页面样式设置 ====================
 
@@ -188,13 +202,16 @@
 % ==================== 文档标题格式 ====================
 
 % 设置文档标题格式，使用参数化字体
+\makeatletter
 \newcommand{\setdoctitle}[1]{%
   \title{\fontsize{\companyrules@titlesize}{\companyrules@titlesize}\companyrules@settitlefont\selectfont #1}%
 }
+\makeatother
 
 % ==================== 辅助命令 ====================
 
 % 提供配置查看命令（调试用）
+\makeatletter
 \newcommand{\showcompanyrulescfg}{%
   \typeout{=== Company Rules v2 配置信息 ===}%
   \typeout{边距: \companyrules@margin}%
@@ -207,6 +224,7 @@
   \typeout{伪粗体强度: \companyrules@fakebold}%
   \typeout{===============================}%
 }
+\makeatother
 
 % 版本信息命令
 \newcommand{\companyruleslversion}{%
@@ -214,6 +232,7 @@
 }
 
 % 提供运行时配置修改命令
+\makeatletter
 \newcommand{\setcompanyrulescfg}[2]{%
   \@ifundefined{companyrules@#1}{%
     \PackageWarning{company-rules}{未知配置项: #1}%
@@ -222,6 +241,7 @@
     \PackageInfo{company-rules}{配置 #1 已更新为: #2}%
   }%
 }
+\makeatother
 
 % 结束宏包定义
 \endinput
