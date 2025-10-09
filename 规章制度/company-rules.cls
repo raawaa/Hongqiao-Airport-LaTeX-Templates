@@ -23,7 +23,7 @@
 \def\companyrules@margin{1.5in}
 \def\companyrules@fontsize{15pt}
 \def\companyrules@lineheight{30pt}
-\def\companyrules@fakebold{4}
+\def\companyrules@fakebold{3}
 \def\companyrules@indent{2em}
 \def\companyrules@primaryfont{STFangsong}
 \def\companyrules@titlefont{STZhongsong}
@@ -194,8 +194,17 @@
 \renewcommand{\title}[1]{%
   \original@title{\fontsize{\companyrules@titlesize}{\companyrules@titlesize}\companyrules@settitlefont\selectfont #1}%
 }
-\makeatother
 
+% 重定义\maketitle命令，控制标题与正文间的间距为一行
+\let\original@maketitle\maketitle
+\renewcommand{\maketitle}{%
+  \begingroup%
+  \centering%
+  \@title\par%
+  \vspace{\baselineskip}% 仅添加一行行距
+  \endgroup%
+}
+\makeatother
 
 % ==================== 辅助命令 ====================
 
