@@ -137,6 +137,35 @@
   listparindent=\commondoc@indent
 }
 
+% ==================== "附件" 环境 ====================
+
+% 目标："附件："后直接接续有序列表第一项内容，无需另起一行；
+% 所有列表项序号左对齐，多行文本对齐到条目正文起始处。
+\newlength{\commondoc@attachlabelwd}
+\newcounter{commondoc@attachment}
+
+\newenvironment{attachments}{%
+  \par
+  % \par\noindent%
+  \setcounter{commondoc@attachment}{0}%
+  \def\item{%
+    \ifnum\value{commondoc@attachment}>0\par\fi%
+    \stepcounter{commondoc@attachment}%
+    \ifnum\value{commondoc@attachment}=1%
+      \makebox[3em][l]{附件：}% 放置"附件："但不占用空间
+      \arabic{commondoc@attachment}.% 固定宽度2em的序号，左对齐
+    \else%
+      \makebox[3em][l]{}% 确保不缩进
+      \arabic{commondoc@attachment}.% 固定宽度2em的序号，左对齐
+    \fi%
+  }%
+}{%
+  \par
+}
+
+% 中文环境名"附件"作为别名，方便直接使用 \begin{附件} ... \end{附件}
+\let\附件\attachments
+
 % ==================== 行内标题命令 ====================
 
 \let\original@subsection\subsection
