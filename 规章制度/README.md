@@ -16,7 +16,7 @@
 \documentclass{company-rules}  % 使用文档类
 
 % 设置文档信息
-\setdoctitle{您的文档标题}
+\title{您的文档标题}
 \author{作者名}
 \date{日期}
 
@@ -80,9 +80,9 @@
 - 页码：底部居中
 
 ### 自定义命令
-- `\setdoctitle{标题}`：设置文档标题
 - `\article{条款标题}`：创建条款（自动编号）
 - `\showcompanyrulescfg`：显示当前配置信息（用于调试）
+- `\setcompanyrulescfg{参数名}{参数值}`：动态修改配置参数
 
 ## 编译方法
 
@@ -96,7 +96,4 @@ xelatex 您的文件名.tex
 1. 使用文档类方式无需手动加载`ctexart`
 2. 确保系统已安装所需字体（仿宋、华文中宋）
 3. 使用 XeLaTeX 编译器，不是 PDFLaTeX
-4. 条款中的百分号需要转义：`10\%`
-5. 修改样式请直接编辑 `company-rules.cls` 文件
-
-也可使用 `\setcompanyrulescfg{参数名}{参数值}` 命令在文档中动态修改配置。
+4. 修改样式请直接编辑 `company-rules.cls` 文件
