@@ -16,6 +16,7 @@
 \def\commondoc@topmargin{3.7cm}
 \def\commondoc@bottommargin{3.5cm}
 \def\commondoc@fontsize{16pt}      % 三号字
+\def\commondoc@subtitlefontsize{16.5pt}  % 楷体字，比仿宋大0.5pt
 \def\commondoc@lineheight{30pt}    % 严格固定行距（Word 式固定值）
 \def\commondoc@fakebold{3}
 \def\commondoc@indent{2em}
@@ -23,6 +24,7 @@
 \def\commondoc@titlefont{STZhongsong}
 \def\commondoc@maintitlesize{22pt}
 \def\commondoc@subtitlefont{STKaiti}
+\def\commondoc@subtitlebaseline{0.1ex}
 
 % ==================== 选项处理 ====================
 
@@ -100,10 +102,10 @@
 
 % 楷体（副标题）
 \IfFontExistsTF{STKaiti}{%
-  \newcommand{\commondoc@setsubtitlefont}{\CJKfontspec{STKaiti}}%
+  \newcommand{\commondoc@setsubtitlefont}{\fontsize{\commondoc@subtitlefontsize}{\commondoc@lineheight}\selectfont\CJKfontspec{STKaiti}}%
 }{%
   \ClassWarning{common-doc}{楷体 STKaiti 未找到，使用 KaiTi}%
-  \newcommand{\commondoc@setsubtitlefont}{\CJKfontspec{KaiTi}}%
+  \newcommand{\commondoc@setsubtitlefont}{\fontsize{\commondoc@subtitlefontsize}{\commondoc@lineheight}\selectfont\CJKfontspec{KaiTi}}%
 }
 
 % ==================== 字号与行距（严格固定） ====================
@@ -145,13 +147,13 @@
 
 \newcommand{\@subsection@star}[2][]{%
   \stepcounter{subsection}%
-  {\normalfont\commondoc@setsubtitlefont（\chinese{subsection}）#2}\space%
+  {\normalfont\smash{\raisebox{\commondoc@subtitlebaseline}{\commondoc@setsubtitlefont（\chinese{subsection}）#2}}}%
   \ignorespaces
 }
 
 \newcommand{\@subsubsection@star}[2][]{%
   \stepcounter{subsubsection}%
-  {\normalfont\arabic{subsubsection}. #2}\space%
+  {\normalfont\fontsize{\commondoc@fontsize}{\commondoc@lineheight}\selectfont\arabic{subsubsection}. #2}\space%
   \ignorespaces
 }
 
@@ -248,6 +250,7 @@
   \typeout{=== Common Document v1.1 配置 ===}%
   \typeout{行距: \commondoc@lineheight}%
   \typeout{正文字号: \commondoc@fontsize}%
+  \typeout{楷体字号: \commondoc@subtitlefontsize}%
   \typeout{主字体: \commondoc@primaryfont}%
   \typeout{===============================}%
 }
