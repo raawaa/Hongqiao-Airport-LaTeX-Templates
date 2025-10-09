@@ -1,0 +1,61 @@
+% !TeX program = XeLaTeX
+% !TeX encoding = UTF-8
+% 公司规章制度样式包
+% 使用方法：\usepackage{mystyle}
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{company-rules}[2024-01-01 公司规章制度样式包]
+
+% 加载必要的宏包
+\RequirePackage{enumitem} % 用于优化列表格式，提升可读性
+\RequirePackage{geometry} % 调整页面边距，适配中文排版
+\RequirePackage{hyperref} % 添加超链接支持
+\geometry{a4paper, margin=1.2in} % 设置A4纸，边距1.2英寸
+
+% 设置中文字体，正文使用仿宋，启用伪粗体功能
+\setCJKmainfont{STFangsong}[
+    BoldFont=*,
+    BoldFeatures={FakeBold=3}, % 启用伪粗体，数值越大越粗
+    ItalicFont=*,
+    ItalicFeatures={FakeSlant=0.2}
+] % 正文使用仿宋，支持伪粗体
+
+% 设置全局字号为小三号
+\renewcommand{\normalsize}{\zihao{-3}}
+
+% 设置段落首行缩进为2字符
+\setlength{\parindent}{2em}
+
+% 设置全局有序列表格式，使编号起始位置与正文首行缩进对齐，编号与内容间无额外空隙
+\setlist[enumerate]{label=（\chinese*）, wide=2em, labelsep=0pt, itemsep=0.5em, listparindent=2em}
+
+% 设置章节标题格式，确保中文编号正确显示，使用华文中宋小三号
+\ctexset{
+    section/name = {第,章},
+    section/number = \chinese{section},
+    section/format = \centering\zihao{-3}\CJKfontspec{STZhongsong},
+    subsection/format = \zihao{-3},
+    subsection/number = \arabic{subsection}
+}
+
+% 定义条款计数器
+\newcounter{article}
+\renewcommand{\thearticle}{第\chinese{article}条}
+
+% 定义条款标题命令，包含首行缩进、小三号字体和伪粗体格式
+\newcommand{\article}[1]{%
+  \stepcounter{article}%
+  \subsection*{\hspace{2em}\textbf{\thearticle}\hspace{0.5em}\textbf{（#1）}}%
+  \addcontentsline{toc}{subsection}{\thearticle\hspace{0.5em}（#1）}%
+}
+
+% 设置页面样式为plain，显示页码在底部居中
+\pagestyle{plain}
+
+% 设置文档标题格式（华文中宋小二号）
+\newcommand{\setdoctitle}[1]{
+    \title{\CJKfontspec{STZhongsong}\zihao{2} #1}
+}
+
+% 结束宏包定义
+\endinput
