@@ -1,0 +1,187 @@
+% !TeX program = XeLaTeX
+% !TeX encoding = UTF-8
+%%
+%% 虹桥机场LaTeX模板通用工具包
+%% 版本：1.0
+%% 日期：2025-10-31
+%%
+%% 为规章制度和通用公文模板提供共享功能
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hongqiao-common}[2025-10-09 v1.0 虹桥机场LaTeX模板通用工具包]
+
+% ==================== 必要宏包加载 ====================
+
+\RequirePackage{geometry}
+\RequirePackage{enumitem}
+\RequirePackage{hyperref}
+\RequirePackage{remreset}
+\RequirePackage{indentfirst}
+
+% ==================== 字体检测与设置工具 ====================
+
+% 字体存在检测命令（使用 xeCJK 提供的命令）
+% 如果 \IfFontExistsTF 不存在则定义它
+\@ifundefined{IfFontExistsTF}{%
+  \newcommand{\IfFontExistsTF}[2]{%
+    \begingroup
+    \edef\testfont{\fontname\font}%
+    \fontspec{#1}%
+    \edef\testfont{\fontname\font}%
+    \ifx\testfont\nullfont
+      \endgroup#2%
+    \else
+      \endgroup#1%
+    \fi
+  }
+}{}
+
+% 通用字体设置命令
+% #1: 字体名称, #2: 粗体参数, #3: 类名前缀
+\makeatletter
+\newcommand{\hongqiao@setCJKmainfont}[3]{%
+  \IfFontExistsTF{#1}{%
+    \ClassInfo{#3}{找到主字体: #1}%
+    \setCJKmainfont{#1}[#2]%
+  }{%
+    \ClassWarning{#3}{主字体 #1\space 未找到，使用默认字体}%
+    \setCJKmainfont{SimSun}[#2]%
+  }%
+}
+
+% 通用标题字体设置命令
+% #1: 字体名称, #2: 粗体参数, #3: 类名前缀
+\newcommand{\hongqiao@setTitleFont}[3]{%
+  \IfFontExistsTF{#1}{%
+    \ClassInfo{#3}{找到标题字体: #1}%
+    \expandafter\def\csname #3@settitlefont\endcsname{\CJKfontspec{#1}[#2]}%
+  }{%
+    \ClassWarning{#3}{标题字体 #1\space 未找到，使用默认字体}%
+    \expandafter\def\csname #3@settitlefont\endcsname{\CJKfontspec{SimSun}[#2]}%
+  }%
+}
+
+% 通用副标题字体设置命令
+% #1: 字体名称, #2: 粗体参数, #3: 类名前缀
+\newcommand{\hongqiao@setSubtitleFont}[3]{%
+  \IfFontExistsTF{#1}{%
+    \ClassInfo{#3}{找到副标题字体: #1}%
+    \expandafter\def\csname #3@setsubtitlefont\endcsname{\CJKfontspec{#1}[#2]}%
+  }{%
+    \ClassWarning{#3}{副标题字体 #1\space 未找到，使用默认字体}%
+    \expandafter\def\csname #3@setsubtitlefont\endcsname{\CJKfontspec{SimKai}[#2]}%
+  }%
+}
+
+% 通用粗体字体设置命令
+% #1: 字体名称, #2: 备选字体, #3: 类名前缀
+\newcommand{\hongqiao@setBoldFont}[3]{%
+  \IfFontExistsTF{#1}{%
+    \ClassInfo{#3}{找到粗体字体: #1}%
+    \expandafter\def\csname #3@setboldfont\endcsname{\CJKfontspec{#1}}%
+  }{%
+    \ClassWarning{#3}{粗体字体 #1\space 未找到，使用备选字体}%
+    \expandafter\def\csname #3@setboldfont\endcsname{\CJKfontspec{#2}}%
+  }%
+}
+
+% ==================== 页面布局工具 ====================
+
+% 通用页面设置命令
+% #1: 左边距, #2: 右边距, #3: 上边距, #4: 下边距, #5: 类名前缀
+\newcommand{\hongqiao@setGeometry}[5]{%
+  \geometry{a4paper, left=#1, right=#2, top=#3, bottom=#4}%
+  \ClassInfo{#5}{页面边距设置为: 左=#1, 右=#2, 上=#3, 下=#4}%
+}
+
+% ==================== 行距设置工具 ====================
+
+% 固定行距设置命令
+% #1: 行距值, #2: 类名前缀
+\newcommand{\hongqiao@setFixedLineHeight}[2]{%
+  \renewcommand{\normalsize}{%
+    \@setfontsize\normalsize{#2}{#1}%
+    \abovedisplayskip\baselineskip\belowdisplayskip\baselineskip
+    \abovedisplayshortskip\z@\belowdisplayshortskip\z@
+    \let\@listi\@listI
+  }%
+  \ClassInfo{#2}{固定行距设置为: #1}%
+}
+
+% ==================== 配置信息显示工具 ====================
+
+% 显示当前配置的通用命令
+% #1: 类名前缀
+\newcommand{\hongqiao@showConfig}[1]{%
+  \typeout{========== #1 模板配置信息 ==========}%
+  \expandafter\ifcsname #1@fontsize\endcsname
+    \expandafter\typeout{\expandafter字体大小: \csname #1@fontsize\endcsname}%
+  \fi
+  \expandafter\ifcsname #1@lineheight\endcsname
+    \expandafter\typeout{\expandafter行距: \csname #1@lineheight\endcsname}%
+  \fi
+  \expandafter\ifcsname #1@primaryfont\endcsname
+    \expandafter\typeout{\expandafter主字体: \csname #1@primaryfont\endcsname}%
+  \fi
+  \expandafter\ifcsname #1@titlefont\endcsname
+    \expandafter\typeout{\expandafter标题字体: \csname #1@titlefont\endcsname}%
+  \fi
+  \typeout{==========================================}%
+}
+
+% ==================== 标题格式工具 ====================
+
+% 重置章节计数器的命令
+% #1: 计数器名称
+\newcommand{\hongqiao@resetCounter}[1]{%
+  \@removefromreset{#1}{section}%
+  \expandafter\newcounter{#1}%
+}
+
+% ==================== 统一配置系统接口 ====================
+
+% 统一的配置设置命令
+% #1: 配置前缀, #2: 配置项, #3: 配置值
+\newcommand{\hongqiao@setConfig}[3]{%
+  \@ifundefined{#1@#2}{%
+    \ClassWarning{#1}{未知配置项: #2}%
+  }{%
+    \expandafter\def\csname #1@#2\endcsname{#3}%
+    \ClassInfo{#1}{配置 #2 已更新为: #3}%
+  }%
+}
+
+% 统一的配置获取命令
+% #1: 配置前缀, #2: 配置项
+\newcommand{\hongqiao@getConfig}[2]{%
+  \@ifundefined{#1@#2}{%
+    \ClassWarning{#1}{配置项 #2 不存在}%
+  }{%
+    \csname #1@#2\endcsname%
+  }%
+}
+
+% 配置验证命令
+% #1: 配置前缀
+\newcommand{\hongqiao@validateConfig}[1]{%
+  \typeout{========== 配置验证开始 ==========}%
+  \expandafter\ifcsname #1@fontsize\endcsname
+    \expandafter\typeout{\expandafter✓ 字体大小: \csname #1@fontsize\endcsname}%
+  \else
+    \typeout{✗ 字体大小: 未定义}%
+  \fi
+  \expandafter\ifcsname #1@lineheight\endcsname
+    \expandafter\typeout{\expandafter✓ 行距: \csname #1@lineheight\endcsname}%
+  \else
+    \typeout{✗ 行距: 未定义}%
+  \fi
+  \expandafter\ifcsname #1@primaryfont\endcsname
+    \expandafter\typeout{\expandafter✓ 主字体: \csname #1@primaryfont\endcsname}%
+  \else
+    \typeout{✗ 主字体: 未定义}%
+  \fi
+  \typeout{=========== 配置验证结束 ==========}%
+}
+
+\makeatother

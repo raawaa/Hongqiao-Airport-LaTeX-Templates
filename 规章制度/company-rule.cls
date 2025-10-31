@@ -6,16 +6,16 @@
 %% 日期：2024-01-01
 %% 
 %% 使用方法：
-%% \documentclass{company-rules}
+%% \documentclass{company-rule}
 %% 或者使用预定义配置：
-%% \documentclass[small]{company-rules}  % 小字体配置
-%% \documentclass[large]{company-rules}  % 大字体配置
-%% \documentclass[nobracket]{company-rules}  % 条款标题不加括号
-%% \documentclass[small,nobracket]{company-rules}  % 组合选项
+%% \documentclass[small]{company-rule}  % 小字体配置
+%% \documentclass[large]{company-rule}  % 大字体配置
+%% \documentclass[nobracket]{company-rule}  % 条款标题不加括号
+%% \documentclass[small,nobracket]{company-rule}  % 组合选项
 %%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{company-rules}[2024-01-01 v2.0 公司规章制度文档类]
+\ProvidesClass{company-rule}[2024-01-01 v2.0 公司规章制度文档类]
 
 % ==================== 参数化配置 ====================
 
@@ -70,23 +70,19 @@
 
 % ==================== 必要的宏包加载 ====================
 
-% 加载必要的宏包
-\RequirePackage{geometry}
-\RequirePackage{enumitem}
-\RequirePackage{hyperref}
-\RequirePackage{remreset}
+% 加载共享工具包
+\RequirePackage{../hongqiao-common}
 
 % ==================== 页面布局设置 ====================
 
 % 使用参数化的页面设置
-\geometry{a4paper, left=\companyrule@leftmargin, right=\companyrule@rightmargin, top=\companyrule@topmargin, bottom=\companyrule@bottommargin}
-\ClassInfo{company-rules}{页面边距设置为: 左=\companyrule@leftmargin, 右=\companyrule@rightmargin, 上=\companyrule@topmargin, 下=\companyrule@bottommargin}
+\hongqiao@setGeometry{\companyrule@leftmargin}{\companyrule@rightmargin}{\companyrule@topmargin}{\companyrule@bottommargin}{company-rule}
 
 % ==================== 字体设置与错误处理 ====================
 
 % 简化的字体设置，带错误处理
 \IfFontExistsTF{\companyrule@primaryfont}{%
-  \ClassInfo{company-rules}{找到主字体: \companyrule@primaryfont}%
+  \ClassInfo{company-rule}{找到主字体: \companyrule@primaryfont}%
   \setCJKmainfont{\companyrule@primaryfont}[
       BoldFont=*,
       BoldFeatures={FakeBold=\companyrule@fakebold},
@@ -94,7 +90,7 @@
       ItalicFeatures={FakeSlant=0.2}
   ]
 }{%
-  \ClassWarning{company-rules}{主字体 \companyrule@primaryfont\space 未找到，使用默认字体}%
+  \ClassWarning{company-rule}{主字体 \companyrule@primaryfont\space 未找到，使用默认字体}%
   \setCJKmainfont{SimSun}[
       BoldFont=*,
       BoldFeatures={FakeBold=\companyrule@fakebold},
@@ -105,21 +101,17 @@
 
 % 定义标题字体命令
 \IfFontExistsTF{\companyrule@titlefont}{%
-  \ClassInfo{company-rules}{找到标题字体: \companyrule@titlefont}%
+  \ClassInfo{company-rule}{找到标题字体: \companyrule@titlefont}%
   \newcommand{\companyrule@settitlefont}{\CJKfontspec{\companyrule@titlefont}[FakeBold=\companyrule@fakebold]}%
 }{%
-  \ClassWarning{company-rules}{标题字体 \companyrule@titlefont\space 未找到，使用默认字体}%
+  \ClassWarning{company-rule}{标题字体 \companyrule@titlefont\space 未找到，使用默认字体}%
   \newcommand{\companyrule@settitlefont}{\CJKfontspec{SimSun}[FakeBold=\companyrule@fakebold]}%
 }
 
 % ==================== 字体大小和行距设置 ====================
 
 % 重新定义\normalsize命令，使用参数化设置
-\renewcommand{\normalsize}{%
-  \@setfontsize\normalsize{\companyrule@fontsize}{\companyrule@lineheight}%
-  \linespread{1}%
-  \selectfont%
-}
+\hongqiao@setFixedLineHeight{\companyrule@lineheight}{\companyrule@fontsize}
 
 % 设置段落首行缩进
 \setlength{\parindent}{\companyrule@indent}
@@ -211,19 +203,17 @@
 
 % 提供配置查看命令（调试用）
 \makeatletter
-\newcommand{\showcompanyrulecfg}{%  
-  \typeout{=== Company Rules v2 配置信息 ===}%
+\newcommand{\showcompanyrulecfg}{%
+  \hongqiao@showConfig{company-rule}%
+  % 显示规章制度模板特有配置
   \typeout{左页边距: \companyrule@leftmargin}%
   \typeout{右页边距: \companyrule@rightmargin}%
   \typeout{上页边距: \companyrule@topmargin}%
   \typeout{下页边距: \companyrule@bottommargin}%
-  \typeout{正文字体大小: \meaning\companyrule@fontsize}%
   \typeout{标题字体大小: \meaning\companyrule@titlesize}%
-  \typeout{行距: \companyrule@lineheight}%
   \typeout{段落缩进: \companyrule@indent}%
-  \typeout{主字体: \companyrule@primaryfont}%
-  \typeout{标题字体: \companyrule@titlefont}%
   \typeout{伪粗体强度: \companyrule@fakebold}%
+  \typeout{条款括号: \companyrule@bracket}%
   \typeout{===============================}%
 }
 \makeatother
@@ -236,12 +226,12 @@
 % 提供运行时配置修改命令
 \makeatletter
 \newcommand{\setcompanyrulecfg}[2]{%
-  \@ifundefined{companyrule@#1}{%
-    \ClassWarning{company-rules}{未知配置项: #1}%
-  }{%
-    \expandafter\def\csname companyrule@#1\endcsname{#2}%
-    \ClassInfo{company-rules}{配置 #1 已更新为: #2}%
-  }%
+  \hongqiao@setConfig{company-rule}{#1}{#2}%
+}
+
+% 提供配置验证命令
+\newcommand{\validatecompanyrulecfg}{%
+  \hongqiao@validateConfig{company-rule}%
 }
 \makeatother
 

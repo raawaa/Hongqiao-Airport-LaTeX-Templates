@@ -47,22 +47,13 @@
 
 % ==================== 必要宏包 ====================
 
-\RequirePackage{geometry}
+% 加载共享工具包
+\RequirePackage{../hongqiao-common}
 \RequirePackage{indentfirst}
-\RequirePackage{enumitem}
-\RequirePackage{remreset}
-\RequirePackage{hyperref}
 
 % ==================== 页面布局 ====================
 
-\geometry{
-  a4paper,
-  left=\commondoc@leftmargin,
-  right=\commondoc@rightmargin,
-  top=\commondoc@topmargin,
-  bottom=\commondoc@bottommargin
-}
-\ClassInfo{common-doc}{页面边距: 左=\commondoc@leftmargin, 右=\commondoc@rightmargin, 上=\commondoc@topmargin, 下=\commondoc@bottommargin}
+\hongqiao@setGeometry{\commondoc@leftmargin}{\commondoc@rightmargin}{\commondoc@topmargin}{\commondoc@bottommargin}{common-doc}
 
 % ==================== 字体设置（带错误处理） ====================
 
@@ -276,11 +267,10 @@
 % ==================== 辅助命令 ====================
 
 \newcommand{\showcommondoccfg}{%
-  \typeout{=== Common Document v1.1 配置 ===}%
-  \typeout{行距: \commondoc@lineheight}%
-  \typeout{正文字号: \commondoc@fontsize}%
+  \hongqiao@showConfig{common-doc}%
+  % 显示通用公文模板特有配置
   \typeout{楷体字号: \commondoc@subtitlefontsize}%
-  \typeout{主字体: \commondoc@primaryfont}%
+  \typeout{副标题基线: \commondoc@subtitlebaseline}%
   \typeout{===============================}%
 }
 
@@ -289,12 +279,12 @@
 }
 
 \newcommand{\setcommondoccfg}[2]{%
-  \@ifundefined{commondoc@#1}{%
-    \ClassWarning{common-doc}{未知配置项: #1}%
-  }{%
-    \expandafter\def\csname commondoc@#1\endcsname{#2}%
-    \ClassInfo{common-doc}{配置 #1 已更新为: #2}%
-  }%
+  \hongqiao@setConfig{common-doc}{#1}{#2}%
+}
+
+% 提供配置验证命令
+\newcommand{\validatecommondoccfg}{%
+  \hongqiao@validateConfig{common-doc}%
 }
 
 % hyperref 最后加载
