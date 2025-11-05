@@ -48,7 +48,7 @@
 % ==================== 必要宏包 ====================
 
 % 加载共享工具包
-\RequirePackage{../soe-common}
+\RequirePackage{soe-common}
 \RequirePackage{indentfirst}
 
 % ==================== 页面布局 ====================
