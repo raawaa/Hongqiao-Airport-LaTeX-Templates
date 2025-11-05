@@ -28,7 +28,10 @@
 *.figlist
 *.makefile
 *.xdv
+
+# 排除所有PDF文件，除了example.pdf
 *.pdf
+!example.pdf
 
 # macOS 系统文件
 .DS_Store
