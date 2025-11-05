@@ -48,12 +48,12 @@
 % ==================== 必要宏包 ====================
 
 % 加载共享工具包
-\RequirePackage{../hongqiao-common}
+\RequirePackage{../soe-common}
 \RequirePackage{indentfirst}
 
 % ==================== 页面布局 ====================
 
-\hongqiao@setGeometry{\commondoc@leftmargin}{\commondoc@rightmargin}{\commondoc@topmargin}{\commondoc@bottommargin}{common-doc}
+\soe@setGeometry{\commondoc@leftmargin}{\commondoc@rightmargin}{\commondoc@topmargin}{\commondoc@bottommargin}{common-doc}
 
 % ==================== 字体设置（带错误处理） ====================
 
@@ -267,7 +267,7 @@
 % ==================== 辅助命令 ====================
 
 \newcommand{\showcommondoccfg}{%
-  \hongqiao@showConfig{common-doc}%
+  \soe@showConfig{common-doc}
   % 显示通用公文模板特有配置
   \typeout{楷体字号: \commondoc@subtitlefontsize}%
   \typeout{副标题基线: \commondoc@subtitlebaseline}%
@@ -279,12 +279,12 @@
 }
 
 \newcommand{\setcommondoccfg}[2]{%
-  \hongqiao@setConfig{common-doc}{#1}{#2}%
+  \soe@setConfig{common-doc}{#1}{#2}
 }
 
 % 提供配置验证命令
 \newcommand{\validatecommondoccfg}{%
-  \hongqiao@validateConfig{common-doc}%
+  \soe@validateConfig{common-doc}
 }
 
 % hyperref 最后加载

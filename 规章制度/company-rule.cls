@@ -71,12 +71,12 @@
 % ==================== 必要的宏包加载 ====================
 
 % 加载共享工具包
-\RequirePackage{../hongqiao-common}
+\RequirePackage{../soe-common}
 
 % ==================== 页面布局设置 ====================
 
 % 使用参数化的页面设置
-\hongqiao@setGeometry{\companyrule@leftmargin}{\companyrule@rightmargin}{\companyrule@topmargin}{\companyrule@bottommargin}{company-rule}
+\soe@setGeometry{\companyrule@leftmargin}{\companyrule@rightmargin}{\companyrule@topmargin}{\companyrule@bottommargin}{company-rule}
 
 % ==================== 字体设置与错误处理 ====================
 
@@ -111,7 +111,7 @@
 % ==================== 字体大小和行距设置 ====================
 
 % 重新定义\normalsize命令，使用参数化设置
-\hongqiao@setFixedLineHeight{\companyrule@lineheight}{\companyrule@fontsize}
+\soe@setFixedLineHeight{\companyrule@lineheight}{\companyrule@fontsize}
 
 % 设置段落首行缩进
 \setlength{\parindent}{\companyrule@indent}
@@ -204,7 +204,7 @@
 % 提供配置查看命令（调试用）
 \makeatletter
 \newcommand{\showcompanyrulecfg}{%
-  \hongqiao@showConfig{company-rule}%
+  \soe@showConfig{company-rule}
   % 显示规章制度模板特有配置
   \typeout{左页边距: \companyrule@leftmargin}%
   \typeout{右页边距: \companyrule@rightmargin}%
@@ -226,12 +226,12 @@
 % 提供运行时配置修改命令
 \makeatletter
 \newcommand{\setcompanyrulecfg}[2]{%
-  \hongqiao@setConfig{company-rule}{#1}{#2}%
+  \soe@setConfig{company-rule}{#1}{#2}
 }
 
 % 提供配置验证命令
 \newcommand{\validatecompanyrulecfg}{%
-  \hongqiao@validateConfig{company-rule}%
+  \soe@validateConfig{company-rule}
 }
 \makeatother
 

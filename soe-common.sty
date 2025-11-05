@@ -1,7 +1,7 @@
 % !TeX program = XeLaTeX
 % !TeX encoding = UTF-8
 %%
-%% 虹桥机场LaTeX模板通用工具包
+%% 国有企业公文模板通用工具包
 %% 版本：1.0
 %% 日期：2025-10-31
 %%
@@ -9,7 +9,7 @@
 %%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{hongqiao-common}[2025-10-09 v1.0 虹桥机场LaTeX模板通用工具包]
+\ProvidesPackage{soe-common}[2025-10-09 v1.0 国有企业公文模板通用工具包]
 
 % ==================== 必要宏包加载 ====================
 
@@ -40,7 +40,7 @@
 % 通用字体设置命令
 % #1: 字体名称, #2: 粗体参数, #3: 类名前缀
 \makeatletter
-\newcommand{\hongqiao@setCJKmainfont}[3]{%
+\newcommand{\soe@setCJKmainfont}[3]{
   \IfFontExistsTF{#1}{%
     \ClassInfo{#3}{找到主字体: #1}%
     \setCJKmainfont{#1}[#2]%
@@ -52,7 +52,7 @@
 
 % 通用标题字体设置命令
 % #1: 字体名称, #2: 粗体参数, #3: 类名前缀
-\newcommand{\hongqiao@setTitleFont}[3]{%
+\newcommand{\soe@setTitleFont}[3]{
   \IfFontExistsTF{#1}{%
     \ClassInfo{#3}{找到标题字体: #1}%
     \expandafter\def\csname #3@settitlefont\endcsname{\CJKfontspec{#1}[#2]}%
@@ -64,7 +64,7 @@
 
 % 通用副标题字体设置命令
 % #1: 字体名称, #2: 粗体参数, #3: 类名前缀
-\newcommand{\hongqiao@setSubtitleFont}[3]{%
+\newcommand{\soe@setSubtitleFont}[3]{
   \IfFontExistsTF{#1}{%
     \ClassInfo{#3}{找到副标题字体: #1}%
     \expandafter\def\csname #3@setsubtitlefont\endcsname{\CJKfontspec{#1}[#2]}%
@@ -76,7 +76,7 @@
 
 % 通用粗体字体设置命令
 % #1: 字体名称, #2: 备选字体, #3: 类名前缀
-\newcommand{\hongqiao@setBoldFont}[3]{%
+\newcommand{\soe@setBoldFont}[3]{
   \IfFontExistsTF{#1}{%
     \ClassInfo{#3}{找到粗体字体: #1}%
     \expandafter\def\csname #3@setboldfont\endcsname{\CJKfontspec{#1}}%
@@ -90,7 +90,7 @@
 
 % 通用页面设置命令
 % #1: 左边距, #2: 右边距, #3: 上边距, #4: 下边距, #5: 类名前缀
-\newcommand{\hongqiao@setGeometry}[5]{%
+\newcommand{\soe@setGeometry}[5]{
   \geometry{a4paper, left=#1, right=#2, top=#3, bottom=#4}%
   \ClassInfo{#5}{页面边距设置为: 左=#1, 右=#2, 上=#3, 下=#4}%
 }
@@ -99,7 +99,7 @@
 
 % 固定行距设置命令
 % #1: 行距值, #2: 类名前缀
-\newcommand{\hongqiao@setFixedLineHeight}[2]{%
+\newcommand{\soe@setFixedLineHeight}[2]{
   \renewcommand{\normalsize}{%
     \@setfontsize\normalsize{#2}{#1}%
     \abovedisplayskip\baselineskip\belowdisplayskip\baselineskip
@@ -113,7 +113,7 @@
 
 % 显示当前配置的通用命令
 % #1: 类名前缀
-\newcommand{\hongqiao@showConfig}[1]{%
+\newcommand{\soe@showConfig}[1]{
   \typeout{========== #1 模板配置信息 ==========}%
   \expandafter\ifcsname #1@fontsize\endcsname
     \expandafter\typeout{\expandafter字体大小: \csname #1@fontsize\endcsname}%
@@ -134,7 +134,7 @@
 
 % 重置章节计数器的命令
 % #1: 计数器名称
-\newcommand{\hongqiao@resetCounter}[1]{%
+\newcommand{\soe@resetCounter}[1]{
   \@removefromreset{#1}{section}%
   \expandafter\newcounter{#1}%
 }
@@ -143,7 +143,7 @@
 
 % 统一的配置设置命令
 % #1: 配置前缀, #2: 配置项, #3: 配置值
-\newcommand{\hongqiao@setConfig}[3]{%
+\newcommand{\soe@setConfig}[3]{
   \@ifundefined{#1@#2}{%
     \ClassWarning{#1}{未知配置项: #2}%
   }{%
@@ -154,7 +154,7 @@
 
 % 统一的配置获取命令
 % #1: 配置前缀, #2: 配置项
-\newcommand{\hongqiao@getConfig}[2]{%
+\newcommand{\soe@getConfig}[2]{
   \@ifundefined{#1@#2}{%
     \ClassWarning{#1}{配置项 #2 不存在}%
   }{%
@@ -164,7 +164,7 @@
 
 % 配置验证命令
 % #1: 配置前缀
-\newcommand{\hongqiao@validateConfig}[1]{%
+\newcommand{\soe@validateConfig}[1]{
   \typeout{========== 配置验证开始 ==========}%
   \expandafter\ifcsname #1@fontsize\endcsname
     \expandafter\typeout{\expandafter✓ 字体大小: \csname #1@fontsize\endcsname}%

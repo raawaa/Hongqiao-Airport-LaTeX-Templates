@@ -11,7 +11,7 @@
 
 \documentclass{common-doc}
 
-\title{关于加强机场安全管理工作的通知}
+\title{关于加强企业安全管理工作的通知}
 
 \begin{document}
 \maketitle
